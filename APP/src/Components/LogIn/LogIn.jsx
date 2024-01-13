@@ -7,23 +7,19 @@ const LogIn=()=>{
 
    const userNameRef = useRef("");
    const websiteRef = useRef("");
-   const errMessageRef = useRef("");
+   const [errMessage,setErrMessage]= useState("");
    const {currentUser, setCurrentUser} = useContext(userContext);
    function handleSubmit(event)
    {
      event.preventDefault();
      fetch(`http://localhost:3000/users?username=${userNameRef.current.value}&website=${websiteRef.current.value}`)
      .then(result=>result.json())
-     .then(json=>
-        {
-            console.log(json);
-            navToHomePage(json)})
-     .catch(error=>
-        errMessageRef.current="Incorrect username or password")
+     .then(json=>json.length? navToHomePage(json[0]):setErrMessage("Incorrect username or password"))
+     .catch(error=>setErrMessage("ERROR try agian"))
    }
 
    function navToHomePage(userDetails){
-    localStorage.setItem("currentUser", userDetails)
+    localStorage.setItem("currentUser", JSON.stringify(userDetails));
     setCurrentUser(userDetails);
    }
 
@@ -46,7 +42,7 @@ const LogIn=()=>{
                 </div>
                 </form>
             </div>
-            <p>{errMessageRef.current.value}</p>
+            <p>{errMessage}</p>
         </>
     )
 }
