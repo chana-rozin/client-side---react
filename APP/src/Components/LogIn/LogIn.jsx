@@ -1,12 +1,14 @@
 import React, {useContext} from "react";
 import { useState } from "react";
 import { userContext } from "../../App";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 
 
 const LogIn=()=>{
    const [errMessage,setErrMessage]= useState("");
    const {currentUser, setCurrentUser} = useContext(userContext);
+   const navigate = useNavigate();
+
    function handleSubmit(event)
    {
      event.preventDefault();
@@ -20,7 +22,9 @@ const LogIn=()=>{
 
    function navToHomePage(userDetails){
     localStorage.setItem("currentUser", JSON.stringify(userDetails));
+    navigate("/home");
     setCurrentUser(userDetails);
+
    }
 
     
@@ -30,9 +34,9 @@ const LogIn=()=>{
                 <h1>Please Log In</h1>
                 <form onSubmit={handleSubmit}> 
                     <label htmlFor="username">username</label>
-                        <input name="username" type="text" />
+                        <input name="username" type="text" required/>
                     <label htmlFor="password">Password</label>
-                        <input name="password" type="password" />
+                        <input name="password" type="password" required/>
                     <div>
                         <button type="submit">Submit</button>
                     </div>
