@@ -61,9 +61,29 @@ const Register = ()=>{
     async function handleSubmit(event)
     {
       event.preventDefault();
-      user.id=await  getNextId()??alert("sorry, try later");
-      
-      navigate("/home");
+      user.id = await getNextId()??alert("sorry, try later");
+      user.name = event.target.name.value;
+      user.email = event.target.email.value;
+      user.address.street = event.target.street.value;
+      user.address.suite = event.target.suite.value;
+      user.address.city = event.target.city.value;
+      user.address.zipcode = event.target.zipcode.value;
+      user.address.geo.lat = event.target.lat.value;
+      user.address.geo.lng = event.target.lng.value;
+      user.address.phone = event.target.phone.value;
+      user.company.name = event.target.companyName.value;
+      user.company.catchPhrase = event.target.catchPhrase.value;
+      user.company.bs = event.target.bs.value;
+    //   navigate("/home");
+      fetch('https://localhost:3000/users', {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        })
+        .then((response) => response.json())
+        .then((json) => console.log(json));
     }
 
     function getNextId()
@@ -112,8 +132,8 @@ const Register = ()=>{
                     <label htmlFor="phone">phone</label>
                         <input required name="phone" type="text" />
                     <label>company</label>
-                    <label htmlFor="name">name</label>
-                        <input required name="name" type="text" />
+                    <label htmlFor="companyName">company name</label>
+                        <input required name="companyName" type="text" />
                     <label htmlFor="catchPhrase">catchPhrase</label>
                         <input required name="catchPhrase" type="text" />
                     <label htmlFor="bs">bs</label>
