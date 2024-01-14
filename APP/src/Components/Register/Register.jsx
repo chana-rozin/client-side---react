@@ -1,14 +1,15 @@
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Register = ()=>{
-    const [password,setPassword] = useState("");
-    const [verifyPassword,setVerifyPassword] = useState("");
-    const [isPwVerified,setIsPwVerified] = useState(false);
-    const [errMessage,setErrMessage]= useState("");
-    const [registerStep,setRgisterStep] = useState(1);
+const Register = () => {
+    const [password, setPassword] = useState("");
+    const [verifyPassword, setVerifyPassword] = useState("");
+    const [PW, setPW] = useState({ "password": "", "verifyPW": "" })
+    const [isPwVerified, setIsPwVerified] = useState(false);
+    const [errMessage, setErrMessage] = useState("");
+    const [registerStep, setRgisterStep] = useState(1);
     const navigate = useNavigate();
-    const user={
+    const user = {
         "id": 0,
         "name": "",
         "username": "",
@@ -19,127 +20,143 @@ const Register = ()=>{
             "city": "",
             "zipcode": "",
             "geo": {
-              "lat": "",
-              "lng": ""
+                "lat": "",
+                "lng": ""
             }
-          },
-          "phone": "",
-          "website": "",
-          "company": {
+        },
+        "phone": "",
+        "website": "",
+        "company": {
             "name": "",
             "catchPhrase": "",
             "bs": ""
-          }
-    }
-    
-    function handlePwVerifyChange(event)
-    {
-        event.preventDefault();
-        setIsPwVerified(password===event.target.value);
+        }
     }
 
-    const handlePasswordChange=(event)=>{
-      event.preventDefault();
-      setPassword(event.target.value)
+    function handlePwVerifyChange(event) {
+        event.preventDefault();
+        setIsPwVerified(password === event.target.value);
     }
 
-    function handleNextBtn(event)
-    {
+    const handlePasswordChange = (event) => {
         event.preventDefault();
+        setPassword(event.target.value)
+    }
+
+    function handleNextBtn(event) {
+        event.preventDefault();
+        setErrMessage("");
         fetch(`http://localhost:3000/users?username=${event.target.username.value}`)
-        .then(result=>result.json())
-        .then(json=>json.length? setErrMessage("This username already exists"):requestMoreDetails(event))
-        .catch(error=>setErrMessage("ERROR try agian"))
+            .then(result => result.json())
+            .then(json => json.length ? setErrMessage("This username already exists") : requestMoreDetails(event))
+            .catch(error => setErrMessage("ERROR try agian"))
     }
-   
-    function requestMoreDetails(event){
-        user.username=event.target.username.value;
-        user.website=event.target.password.value;
+
+    function requestMoreDetails(event) {
+        user.username = event.target.username.value;
+        user.website = event.target.password.value;
         setRgisterStep(2);
     }
 
-    async function handleSubmit(event)
-    {
-      event.preventDefault();
-      user.id = await getNextId()??alert("sorry, try later");
-      user.name = event.target.name.value;
-      user.email = event.target.email.value;
-      user.address.street = event.target.street.value;
-      user.address.suite = event.target.suite.value;
-      user.address.city = event.target.city.value;
-      user.address.zipcode = event.target.zipcode.value;
-      user.address.geo.lat = event.target.lat.value;
-      user.address.geo.lng = event.target.lng.value;
-      user.address.phone = event.target.phone.value;
-      user.company.name = event.target.companyName.value;
-      user.company.catchPhrase = event.target.catchPhrase.value;
-      user.company.bs = event.target.bs.value;
-    //   navigate("/home");
-      fetch('https://localhost:3000/users', {
-        method: 'POST',
-        body: JSON.stringify(user),
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
+    async function handleSubmit(event) {
+        event.preventDefault();
+        setErrMessage("");
+        user.id = await getNextId() ?? alert("sorry, try later");
+        user.name = event.target.name.value;
+        user.email = event.target.email.value;
+        user.address.street = event.target.street.value;
+        user.address.suite = event.target.suite.value;
+        user.address.city = event.target.city.value;
+        user.address.zipcode = event.target.zipcode.value;
+        user.address.geo.lat = event.target.lat.value;
+        user.address.geo.lng = event.target.lng.value;
+        user.address.phone = event.target.phone.value;
+        user.company.name = event.target.companyName.value;
+        user.company.catchPhrase = event.target.catchPhrase.value;
+        user.company.bs = event.target.bs.value;
+        fetch("http://localhost:3000/users", {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
         })
-        .then((response) => response.json())
-        .then((json) => console.log(json));
+            .then((response) => {
+                if (response.status === 201) {
+                    fetch("http://localhost:3000/config", {
+                        method: "PUT",
+                        body: JSON.stringify({ "id": user.id + 1 }),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8",
+                        },
+                    }).then().catch(err => console.error(err))
+                    localStorage.setItem("currentUser", JSON.stringify(user))
+                    navigate("/home", { replace: true });
+                }
+                else {
+                    setErrMessage("500 something get worng:( try latter.")
+                }
+            })
     }
 
-    function getNextId()
-    {
-        return fetch(`http://localhost:3000/config`)
-        .then(result=>result.json())
-        .then(json=>json.id)
-        .catch(error=>null)
+    async function getNextId() {
+        const id = await fetch(`http://localhost:3000/config`)
+            .then(result => result.json())
+            .then(json => json.id)
+            .catch(error => console.error(error));
+        return id;
     }
 
-    return(
+    useEffect(() => {
+        setIsPwVerified(!PW.password == "" && PW.password === PW.verifyPW);
+    }, [PW.password, PW.verifyPW])
+
+    return (
         <>
-          <div className="signUp-wrapper">
+            <div className="signUp-wrapper">
                 <h1>Please sign up</h1>
-                <form onSubmit={(event)=>handleNextBtn(event)}> 
+                <form onSubmit={(event) => handleNextBtn(event)}>
                     <label htmlFor="username">Username</label>
-                        <input disabled={registerStep!=1} name="username" type="text" />
+                    <input disabled={registerStep != 1} name="username" type="text" required />
                     <label htmlFor="password">Password</label>
-                        <input disabled={registerStep!=1} onChange={(event)=>handlePasswordChange(event)} name="password" type="password" />
+                    <input disabled={registerStep != 1} onChange={(e) => setPW(prev => ({ ...prev, password: e.target.value }))} name="password" type="password" />
                     <label htmlFor="verifyPassword">Verify Password</label>
-                        <input disabled={registerStep!=1} onChange={(event)=>handlePwVerifyChange(event)} name="verifyPassword" type="password" />
-                    {registerStep===1 &&<div>
-                       <button disabled={!isPwVerified} type="submit">Next</button>
+                    <input disabled={registerStep != 1} onChange={(e) => setPW(prev => ({ ...prev, verifyPW: e.target.value }))} name="verifyPassword" type="password" />
+                    {registerStep === 1 && <div>
+                        <button disabled={!isPwVerified} type="submit">Next</button>
                     </div>}
                 </form>
 
-                {registerStep===2 && <form onSubmit={handleSubmit}> 
+                {registerStep === 2 && <form onSubmit={handleSubmit}>
                     <label htmlFor="name">Name</label>
-                        <input name="name" type="text" />
+                    <input name="name" type="text" />
                     <label htmlFor="email">Email</label>
-                        <input required name="email" type="email" />
-                    <label>Address</label>    
+                    <input required name="email" type="email" />
+                    <label>Address</label>
                     <label htmlFor="street">street</label>
-                        <input required name="street" type="text" />
+                    <input required name="street" type="text" />
                     <label htmlFor="suite">suite</label>
-                        <input required name="suite" type="text" />
+                    <input required name="suite" type="text" />
                     <label htmlFor="city">city</label>
-                        <input required name="city" type="text" />
+                    <input required name="city" type="text" />
                     <label htmlFor="zipcode">zipcode</label>
-                        <input required name="zipcode" type="text" />
+                    <input required name="zipcode" type="text" />
                     <label>geo</label>
                     <label htmlFor="lat">lat</label>
-                        <input required name="lat" type="text" />
+                    <input required name="lat" type="text" />
                     <label htmlFor="lng">lng</label>
-                        <input required name="lng" type="text" />
+                    <input required name="lng" type="text" />
                     <label htmlFor="phone">phone</label>
-                        <input required name="phone" type="text" />
+                    <input required name="phone" type="text" />
                     <label>company</label>
                     <label htmlFor="companyName">company name</label>
-                        <input required name="companyName" type="text" />
+                    <input required name="companyName" type="text" />
                     <label htmlFor="catchPhrase">catchPhrase</label>
-                        <input required name="catchPhrase" type="text" />
+                    <input required name="catchPhrase" type="text" />
                     <label htmlFor="bs">bs</label>
-                        <input required name="bs" type="text" />
+                    <input required name="bs" type="text" />
                     <div>
-                       <button type="submit">submit</button>
+                        <button type="submit">submit</button>
                     </div>
                 </form>}
             </div>
