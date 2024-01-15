@@ -3,7 +3,8 @@ import LogIn from './Components/LogIn/LogIn'
 import Home from './Components/Home/Home'
 import Register from './Components/Register/Register'
 import Todos from './Components/Todos/Todos'
-
+import Albums from './Components/Albums/Albums'
+import Posts from './Components/Posts/Posts'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom'
@@ -12,7 +13,9 @@ export const userContext = createContext()
 
 function App() {
   const [currentUser, setCurrentUser] = useState(localStorage.getItem("currentUser"));
-  fetch("http://localhost:3000/users?username=Bret&website=hildegard.org").then(re => re.json()).then(r => console.log(r))
+  fetch("http://localhost:3000/users?username=Bret&website=hildegard.org")
+  .then(re => re.json())
+  .then(r => console.log(r));
  
   return (
     <>

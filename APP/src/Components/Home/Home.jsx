@@ -1,13 +1,17 @@
 import { Link , useNavigate} from "react-router-dom"
+import React, {useContext} from "react";
+import { userContext } from "../../App";
 
 const Home = ()=>{
 
     const navigate = useNavigate();
-
+    const {currentUser, setCurrentUser} = useContext(userContext);
     function handleLogout(){
         localStorage.clear();
         navigate("/login");
+        setCurrentUser(null);
     }
+
     return (
         <>
             <h1>hi!</h1>
