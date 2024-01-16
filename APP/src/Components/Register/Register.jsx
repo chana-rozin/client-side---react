@@ -85,7 +85,7 @@ const Register = () => {
                 if (response.status === 201) {
                     fetch("http://localhost:3000/config", {
                         method: "PUT",
-                        body: JSON.stringify({ "id": user.id + 1 }),
+                        body: JSON.stringify({ "userId": user.id + 1 }),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8",
                         },
@@ -102,7 +102,7 @@ const Register = () => {
     async function getNextId() {
         const id = await fetch(`http://localhost:3000/config`)
             .then(result => result.json())
-            .then(json => json.id)
+            .then(json => json.userId)
             .catch(error => console.error(error));
         return id;
     }
