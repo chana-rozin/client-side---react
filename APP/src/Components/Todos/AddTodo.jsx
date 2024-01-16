@@ -1,12 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
-
 const AddTodo = () => {
     const location = useLocation();
     console.log(location.state);
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
+    const navigate = useNavigate();
 
     const todo = {
         "userId": "0",
@@ -15,13 +15,14 @@ const AddTodo = () => {
         "completed": false
     }
 
-    function handleAddBtn(event) {
+    async function handleAddBtn(event) {
         event.preventDefault();
         todo.userId = userId;
         todo.title = event.target.title.value;
         todo.completed = event.target.completed.checked;
-        todo.id = getTodoId();
+        todo.id = await getTodoId();
         postTodo();
+        navigate(-1);
     }
 
     async function postTodo() {
@@ -43,7 +44,7 @@ const AddTodo = () => {
     }
 
     function increaseTodoId() {
-        fetch("http://localhost:3000/config", {
+        fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
             body: JSON.stringify({ "todoId": todo.id + 1 }),
             headers: {
@@ -55,7 +56,7 @@ const AddTodo = () => {
 
 
     async function getTodoId() {
-        const id = await fetch("http://localhost:3000/config")
+        const id = await fetch("http://localhost:3000/config/1")
             .then(result => result.json())
             .then(json => json.todoId)
             .catch(error => console.error(error));
@@ -71,7 +72,6 @@ const AddTodo = () => {
                     <span><input placeholder="your todo title:" type="text" name="title"></input></span>
                     <button type="submit">add</button>
                 </form>
-
             </div>
         </>
     )

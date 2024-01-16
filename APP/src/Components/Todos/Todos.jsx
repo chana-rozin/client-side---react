@@ -1,8 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef,useCallback } from "react";
 import { userContext } from "../../App";
 import AddTodo from "./AddTodo";
 import Select from 'react-select'
-import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import deleteIcon from "../../Images/deleteIcon.svg";
+import updateIcon from "../../Images/editIcon.svg";
 
 const Todos = () => {
 
@@ -13,7 +15,8 @@ const Todos = () => {
     const [todosArr, setTodosArr] = useState([]);
     const [sortBy, setSortBy] = useState("");
     const [isAdded, setIsAdded] = useState(false);
-
+    const [id,setId] = useState(0);
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchTodos = async () =>
             fetch(`http://localhost:3000/todos?userId=${userId}`)
@@ -32,12 +35,30 @@ const Todos = () => {
         setTodosArr(data.map((todo, index) =>
         (<div key={index} props={todo}>
             <span><input type="checkbox" name="completed" checked={todo.completed} /></span>
-            <span>id: {todo.id} </span>
+            <span>id: {index+1} </span>
             <span>{todo.title}</span>
+            <span onClick={()=>deleteTodo(todo.id)}><img src={deleteIcon}></img></span>
+            <span onClick={()=>navToUpdate(todo.id)}><img src={updateIcon}></img></span>
         </div>
         )))
     }
 
+     function navToUpdate(id){
+        setTodosArr((prevTodosArr) => {
+          console.log(prevTodosArr);
+          navigate(`${id}/update`, { state: { id: id, todosArr: prevTodosArr} });
+          return prevTodosArr;
+        });
+      }
+      
+
+    function deleteTodo(id)
+    {
+        setTodosArr(prevArr=>prevArr.filter( todo =>todo.props.props.id != id));
+
+        // fetch(`http://localhost:3000/todos/${id}`,{
+        //     method: 'DELETE',})
+    }
 
     function handleFilterBy(filterKey, inputValue) {
         const updateFilters = inputValue === ""
