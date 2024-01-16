@@ -13,7 +13,7 @@ const Home = ()=>{
         setCurrentUser(null);
     }
 
-
+    
     return (
         <>
             <h1>hi!</h1>
