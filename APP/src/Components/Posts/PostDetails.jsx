@@ -5,7 +5,7 @@ const PostDetails=()=>{
     const {postBody} = location.state;
     console.log(postBody)
 
-    return(<><h1>hi</h1></>)
+    return(<><p>{postBody} </p></>)
 }
 
 export default PostDetails
