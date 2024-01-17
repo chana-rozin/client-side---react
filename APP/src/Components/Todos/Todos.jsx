@@ -1,10 +1,13 @@
-import React, { useContext, useState, useEffect, useRef,useCallback } from "react";
+import React, { useContext, useState, useEffect, useRef, useCallback } from "react";
 import { userContext } from "../../App";
 import AddTodo from "./AddTodo";
 import Select from 'react-select'
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import deleteIcon from "../../Images/deleteIcon.svg";
+import { RiDeleteBin7Fill } from "react-icons/ri";
+import { MdOutlineEdit } from "react-icons/md";
 import updateIcon from "../../Images/editIcon.svg";
+import Popup from 'reactjs-popup';
+import UpdateTodo from "./Updateodo";
 
 const Todos = () => {
 
@@ -15,49 +18,32 @@ const Todos = () => {
     const [todosArr, setTodosArr] = useState([]);
     const [sortBy, setSortBy] = useState("");
     const [isAdded, setIsAdded] = useState(false);
-    const [id,setId] = useState(0);
+    const [id, setId] = useState(0);
     const navigate = useNavigate();
+    const [inEditing,setInEditing] = useState(-1);
     useEffect(() => {
         const fetchTodos = async () =>
             fetch(`http://localhost:3000/todos?userId=${userId}`)
                 .then(response => response.json())
                 .then(data => {
-                    displayTodos(data);
+                    setTodosArr(data);
                 })
                 .catch(error =>
                     console.error(error));
         fetchTodos();
     }, []);
 
-    useEffect(() => setToShowTodosArr(todosArr), [todosArr]);
+    useEffect(() =>{ setToShowTodosArr(todosArr)}, [todosArr]);
+    useEffect(() =>{handleFilterBy(); handleSortBy()}, [inEditing, isAdded]);
 
-    function displayTodos(data) {
-        setTodosArr(data.map((todo, index) =>
-        (<div key={index} props={todo}>
-            <span><input type="checkbox" name="completed" checked={todo.completed} /></span>
-            <span>id: {index+1} </span>
-            <span>{todo.title}</span>
-            <span onClick={()=>deleteTodo(todo.id)}><img src={deleteIcon}></img></span>
-            <span onClick={()=>navToUpdate(todo.id)}><img src={updateIcon}></img></span>
-        </div>
-        )))
-    }
 
-     function navToUpdate(id){
-        setTodosArr((prevTodosArr) => {
-          console.log(prevTodosArr);
-          navigate(`${id}/update`, { state: { id: id, todosArr: prevTodosArr} });
-          return prevTodosArr;
-        });
-      }
-      
 
-    function deleteTodo(id)
-    {
-        setTodosArr(prevArr=>prevArr.filter( todo =>todo.props.props.id != id));
+    function deleteTodo(id) {
+        setTodosArr(prevArr => prevArr.filter(todo => todo.id != id));
 
-        // fetch(`http://localhost:3000/todos/${id}`,{
-        //     method: 'DELETE',})
+        fetch(`http://localhost:3000/todos/${id}`,{
+            method: 'DELETE',})
+            .then(re=>console.log(re));
     }
 
     function handleFilterBy(filterKey, inputValue) {
@@ -68,7 +54,7 @@ const Todos = () => {
         setToShowTodosArr(
             todosArr.filter(todo =>
                 updateFilters.every(filter =>
-                    todo.props.props[filter.key] === filter.value
+                    todo[filter.key] === filter.value
                 )
             )
         );
@@ -94,13 +80,13 @@ const Todos = () => {
             const sortedTodos = [...toShowTodosArr].sort((a, b) => {
                 switch (sortBy) {
                     case "id":
-                        return Number(a.props.props.id) - Number(b.props.props.id);
+                        return Number(a.id) - Number(b.id);
                     case "title":
-                        return a.props.props.title.localeCompare(b.props.props.title);
+                        return a.title.localeCompare(b.title);
                     case "completed":
-                        return Number(b.props.props.completed) - Number(a.props.props.completed);
+                        return Number(b.completed) - Number(a.completed);
                     case "notCompleted":
-                        return Number(a.props.props.completed) - Number(b.props.props.completed);
+                        return Number(a.completed) - Number(b.completed);
                     default:
                         return 0;
                 }
@@ -126,15 +112,44 @@ const Todos = () => {
                     <label htmlFor="searchByTitle">Title</label>
                     <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilterBy("title", e.target.value)}></input>
                     <label htmlFor="searchByCompleted">Completed</label>
-                    <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked)}></input></label>
+                    <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked?true:"")}></input></label>
             </div>
             <div>
-                {toShowTodosArr}
-            </div>
-            <Link to={"add"}>press to add</Link>
-            <Outlet />
-        </>
-    );
-};
+                {toShowTodosArr.map((todo, index) =>
+                
+                    (<div key={index} props={inEditing}>
+                    {index != inEditing?<>
+                    <span><input type="checkbox" name="completed" checked={todo.completed} /></span>
+                    <span>id: {index + 1} </span>
+                    <span> {todo.title}</span>
+                    <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
+                    <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></>:
 
-export default Todos;
+                    <UpdateTodo todo={todo}setInEditing={setInEditing} setTodosArr={setTodosArr}/>}
+                    
+                </div>
+                
+                ))}
+                 <Popup trigger=
+                {<button> Click to open modal </button>} 
+                modal nested>
+                {
+                    close => (
+                        <div className='modal'>
+                            <div className='content'>
+                                <AddTodo setIsAdded = {setIsAdded} setTodosArr={setTodosArr} closePopUp={close}/>
+                            </div>
+                        </div>
+                    )
+                }
+            </Popup>
+                <Outlet />
+           </div>
+         </> ) 
+}
+
+ export default Todos
+
+           
+
+            //npm i reactjs-popup

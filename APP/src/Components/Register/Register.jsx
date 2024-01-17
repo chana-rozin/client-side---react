@@ -85,7 +85,7 @@ const Register = () => {
                 if (response.status === 201) {
                     fetch("http://localhost:3000/config/1", {
                         method: 'PATCH',
-                        body: JSON.stringify({ "userId": user.id + 1 }),
+                        body: JSON.stringify({ "userId": (int)(user.id) + 1 }),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8",
                         },
@@ -104,7 +104,7 @@ const Register = () => {
             .then(result => result.json())
             .then(json => json.userId)
             .catch(error => console.error(error));
-        return id;
+        return id.toString();
     }
 
     useEffect(() => {

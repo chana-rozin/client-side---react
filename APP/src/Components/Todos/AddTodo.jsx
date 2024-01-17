@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
-const AddTodo = () => {
-    const location = useLocation();
-    console.log(location.state);
+const AddTodo = (props) => {
+
+    const { setTodosArr, closePopUp,setIsAdded} = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const AddTodo = () => {
         todo.completed = event.target.completed.checked;
         todo.id = await getTodoId();
         postTodo();
-        navigate(-1);
+        closePopUp();
     }
 
     async function postTodo() {
@@ -36,6 +36,8 @@ const AddTodo = () => {
             .then((response) => {
                 if (response.status === 201) {
                     increaseTodoId();
+                    setTodosArr(prevArr=>[...prevArr,todo]);
+                    setIsAdded(true);
                 }
                 else {
                     setErrMessage("500 something get worng:( try latter.")
@@ -46,7 +48,7 @@ const AddTodo = () => {
     function increaseTodoId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "todoId": todo.id + 1 }),
+            body: JSON.stringify({ "todoId": (int)(todo.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
@@ -58,7 +60,7 @@ const AddTodo = () => {
     async function getTodoId() {
         const id = await fetch("http://localhost:3000/config/1")
             .then(result => result.json())
-            .then(json => json.todoId)
+            .then(json => json.todoId.toString())
             .catch(error => console.error(error));
         return id;
     }
@@ -76,4 +78,6 @@ const AddTodo = () => {
         </>
     )
 }
+
+
 export default AddTodo
