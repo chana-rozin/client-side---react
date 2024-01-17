@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import './Posts.css'; // Import a separate CSS file for styling
 import { userContext } from "../../App";
 
 const Posts = () => {
-
+    const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
     const [filtersArr, setFiltersArr] = useState([]);
+    const [selectedPostId, setSelectedPostId] = useState(-1)
     const [pagination, setPagination] = useState({
         data: [],
         offset: 0,
@@ -15,6 +19,7 @@ const Posts = () => {
         pageCount: 0,
         currentData: []
     });
+
 
     const [allData, setAllData] = useState([]);
 
@@ -90,6 +95,24 @@ const Posts = () => {
     }
 
 
+    function viewPost(post){
+        
+    }
+
+   function OpenOrClosePost(post){
+    if(selectedPostId==post.id)
+    {
+        setSelectedPostId(-1);
+        navigate(`/users/${userId}/posts`)
+    }
+    else{
+        setSelectedPostId(post.id);
+        console.log(post.id)
+        navigate(`${post.id}`, {state: {postBody:post.body}})
+    }
+   }
+
+
 
     return (
         <>
@@ -108,7 +131,8 @@ const Posts = () => {
                     <div key={post.id} className="post">
                        <span>id: {post.id}</span> 
                        <span>{post.title}</span>
-                       <span onClick={()=>viewPost()} style={{color:"red"}}>view more</span>
+                     <span onClick={()=>OpenOrClosePost(post)} style={{color:"red"}}>{selectedPostId==post.id ? <IoIosArrowDown />:<IoIosArrowBack />}</span>
+                     {selectedPostId==post.id&&<Outlet/>}
                     </div>
                 ))}
                 <ReactPaginate

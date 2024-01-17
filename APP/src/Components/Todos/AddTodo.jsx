@@ -48,7 +48,7 @@ const AddTodo = (props) => {
     function increaseTodoId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "todoId": (int)(todo.id) + 1 }),
+            body: JSON.stringify({ "todoId": (Number)(todo.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },

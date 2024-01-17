@@ -85,7 +85,7 @@ const Register = () => {
                 if (response.status === 201) {
                     fetch("http://localhost:3000/config/1", {
                         method: 'PATCH',
-                        body: JSON.stringify({ "userId": (int)(user.id) + 1 }),
+                        body: JSON.stringify({ "userId": (Number)(user.id) + 1 }),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8",
                         },
