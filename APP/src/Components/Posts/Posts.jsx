@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ReactPaginate from 'react-paginate';
 import './Posts.css'; // Import a separate CSS file for styling
-import viewIcon from '../../Images/viewIcon.svg'
 import { userContext } from "../../App";
 
 const Posts = () => {
@@ -109,7 +108,7 @@ const Posts = () => {
                     <div key={post.id} className="post">
                        <span>id: {post.id}</span> 
                        <span>{post.title}</span>
-                       <span onClick={()=>viewPost()}><img src={viewIcon}></img></span>
+                       <span onClick={()=>viewPost()} style={{color:"red"}}>view more</span>
                     </div>
                 ))}
                 <ReactPaginate
