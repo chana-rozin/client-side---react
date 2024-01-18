@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
 const AddPost = (props) => {
 
-    const { setTodosArr, closePopUp,setIsAdded} = props;
+    const { setAllData, closePopUp,setIsAdded} = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const AddPost = (props) => {
         post.userId = userId;
         post.title = event.target.title.value;
         post.body = event.target.body.value;
-        post.id = await getTodoId();
+        post.id = await getPostId();
         addPost();
         closePopUp();
     }
