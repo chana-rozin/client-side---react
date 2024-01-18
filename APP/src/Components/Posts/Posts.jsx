@@ -146,7 +146,7 @@ const Posts = () => {
                         close => (
                             <div className='modal'>
                                 <div className='content'>
-                                    <AddPost setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} />
+                                    <AddPost setIsAdded={setIsAdded} setAllData={setAllData} closePopUp={close} />
                                 </div>
                             </div>
                         )

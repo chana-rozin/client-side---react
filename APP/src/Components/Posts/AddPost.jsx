@@ -19,7 +19,7 @@ const AddPost = (props) => {
         post.userId = userId;
         post.title = event.target.title.value;
         post.body = event.target.body.value;
-        todo.id = await getTodoId();
+        post.id = await getTodoId();
         addPost();
         closePopUp();
     }
@@ -35,7 +35,7 @@ const AddPost = (props) => {
             .then((response) => {
                 if (response.status === 201) {
                     increasePostId();
-                    setPostsArr(prevArr=>[...prevArr,post]);
+                    setAllData(prevArr=>[...prevArr,post]);
                     setIsAdded(true);
                 }
                 else {
