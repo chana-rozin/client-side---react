@@ -1,42 +1,41 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
-const AddTodo = (props) => {
+const AddPost = (props) => {
 
     const { setTodosArr, closePopUp,setIsAdded} = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
 
-    const todo = {
+    const post = {
         "userId": "0",
-        "id": 0,
+        "id": "0",
         "title": "",
-        "completed": false
-    }
-
+        "body": ""
+      }
     async function handleAddBtn(event) {
         event.preventDefault();
-        todo.userId = userId;
-        todo.title = event.target.title.value;
-        todo.completed = event.target.completed.checked;
+        post.userId = userId;
+        post.title = event.target.title.value;
+        post.body = event.target.body.value;
         todo.id = await getTodoId();
-        addTodo();
+        addPost();
         closePopUp();
     }
 
-    async function addTodo() {
-        await fetch("http://localhost:3000/todos", {
+    async function addPost() {
+        await fetch("http://localhost:3000/posts", {
             method: 'POST',
-            body: JSON.stringify(todo),
+            body: JSON.stringify(post),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
         })
             .then((response) => {
                 if (response.status === 201) {
-                    increaseTodoId();
-                    setTodosArr(prevArr=>[...prevArr,todo]);
+                    increasePostId();
+                    setPostsArr(prevArr=>[...prevArr,post]);
                     setIsAdded(true);
                 }
                 else {
@@ -45,10 +44,10 @@ const AddTodo = (props) => {
             })
     }
 
-    function increaseTodoId() {
+    function increasePostId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "todoId": (Number)(todo.id) + 1 }),
+            body: JSON.stringify({ "postId": (Number)(post.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
@@ -57,17 +56,17 @@ const AddTodo = (props) => {
     }
 
 
-    async function getTodoId() {
+    async function getPostId() {
         const id = await fetch("http://localhost:3000/config/1")
             .then(result => result.json())
-            .then(json => json.todoId.toString())
+            .then(json => json.postId.toString())
             .catch(error => console.error(error));
         return id;
     }
 
     return (
         <>
-            <p>add your todo:</p>
+            <p>add your post:</p>
             <div>
                 <form onSubmit={(event) => handleAddBtn(event)}>
                     <span><input type="checkbox" name="completed"></input></span>

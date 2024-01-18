@@ -36,6 +36,8 @@ const Posts = () => {
     const [allData, setAllData] = useState([]);
     const [displayMode, setDisplayMode] = useState("myPosts");
     const [inEditing,setInEditing] = useState(-1);
+    const [isAdded, setIsAdded] = useState(false);
+
 
 
     const fetchPosts = async () => {
@@ -133,6 +135,7 @@ const Posts = () => {
             <InfiniteScroll
             pageStart={0}
             loadMore={loadMore}
+
             hasMore={hasMore}
             loader={<h4 className="loader">Loading...</h4>}
             useWindow={false}>
@@ -143,7 +146,7 @@ const Posts = () => {
                         close => (
                             <div className='modal'>
                                 <div className='content'>
-                                    {/* <AddPost setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} /> */}
+                                    <AddPost setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} />
                                 </div>
                             </div>
                         )
