@@ -6,28 +6,37 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import './Posts.css'; // Import a separate CSS file for styling
 import { userContext } from "../../App";
-
+import { RiDeleteBin7Fill } from "react-icons/ri";
+import { MdOutlineEdit } from "react-icons/md";
+import UpdatePost from './UpdatePost';
+import Popup from 'reactjs-popup';
+import { FiPlusCircle } from "react-icons/fi";
 const Posts = () => {
-
-    const itemsPerPage = 20;
+  const itemsPerPage = 20;
   const [hasMore, setHasMore] = useState(true);
   const [records, setrecords] = useState(itemsPerPage);
+
   const loadMore = () => {
     if (records === displayedData.length) {
       setHasMore(false);
-    } else {
+    }
+    else {
       setTimeout(() => {
         setrecords(records + itemsPerPage);
       }, 2000);
     }
   };
+
     const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
-    const [filtersArr, setFiltersArr] = useState([]);
+    const [filtersArr, setFiltersArr] = useState([{"key":"userId" , "value":userId.toString()}]);
     const [selectedPostId, setSelectedPostId] = useState(-1)
     const [displayedData, setDisplayedData] = useState([]);
     const [allData, setAllData] = useState([]);
+    const [displayMode, setDisplayMode] = useState("myPosts");
+    const [inEditing,setInEditing] = useState(-1);
+
 
     const fetchPosts = async () => {
         try {
@@ -53,16 +62,18 @@ const Posts = () => {
         
         const filteredPostsArr=  allData.filter(post =>
             filtersArr.every(filter =>
-                post[filter.key] === filter.value
+                post[filter.key] 
+                === filter.value
             )
         )
         setDisplayedData(filteredPostsArr);
         
     }
+
     function handleFilter(filterKey, inputValue) {
         const updateFilters = inputValue === ""
-            ? removeFilter(filtersArr, filterKey)
-            : updateOrAddFilter(filtersArr, filterKey, inputValue);
+            ? removeFilter(filterKey)
+            : updateOrAddFilter(filterKey, inputValue);
     
         setFiltersArr(updateFilters);
     }
@@ -70,38 +81,39 @@ const Posts = () => {
 
    
 
-    function removeFilter(filters, keyToRemove) {
-        return filters.filter(el => el.key !== keyToRemove);
+    function removeFilter(keyToRemove) {
+        return filtersArr.filter(el => el.key !== keyToRemove);
     }
 
-    function updateOrAddFilter(filters, keyToUpdate, value) {
+    function updateOrAddFilter(keyToUpdate, value) {
         
-        if (filters.some(el => el.key === keyToUpdate)) {
-            return filters.map(el =>
+        if (filtersArr.some(el => el.key === keyToUpdate)) {
+            return filtersArr.map(el =>
                 el.key === keyToUpdate ? { ...el, value } : el);
         }
-        else return [...filters, { key: keyToUpdate, value }];
-    }
-
-
-    function viewPost(post){
-        
+        else return [...filtersArr,  { key: keyToUpdate, value }];
     }
 
    function OpenOrClosePost(post){
     if(selectedPostId==post.id)
     {
         setSelectedPostId(-1);
-        navigate(`/users/${userId}/posts`)
+       
     }
     else{
         setSelectedPostId(post.id);
         console.log(post.id)
-        navigate(`${post.id}`, {state: {postBody:post.body}})
     }
    }
 
 
+    function deletePost(id) {
+        setAllData(prevArr => prevArr.filter(post => post.id != id));
+
+        fetch(`http://localhost:3000/posts/${id}`,{
+            method: 'DELETE',})
+            .then(re=>console.log(re));
+    }
 
     return (
         <>
@@ -112,26 +124,49 @@ const Posts = () => {
                     <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
                     <label htmlFor="searchByTitle">Title</label>
                     <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
-                    <label htmlFor="searchByCompleted">view only my posts</label>
-                    <input type="checkbox" name="searchByUser" onChange={(e) => handleFilter("userId", e.target.checked?userId:"")}></input></label>
+                </label>
             </div>
+            {displayMode==="myPosts"? <button onClick={()=>{setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts")}} >press to view all posts</button>
+            :<button onClick={()=>{setFiltersArr(updateOrAddFilter("userId",userId)); setDisplayMode("myPosts")}} >press to view only my posts</button>}
+
             <div>
-                
-               <InfiniteScroll
-      pageStart={0}
-      loadMore={loadMore}
-      hasMore={hasMore}
-      loader={<h4 className="loader">Loading...</h4>}
-      useWindow={false}
-    >
+            <InfiniteScroll
+            pageStart={0}
+            loadMore={loadMore}
+            hasMore={hasMore}
+            loader={<h4 className="loader">Loading...</h4>}
+            useWindow={false}>
+         <Popup trigger=
+                    {<FiPlusCircle />}
+                    position="down">
+                    {
+                        close => (
+                            <div className='modal'>
+                                <div className='content'>
+                                    {/* <AddPost setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} /> */}
+                                </div>
+                            </div>
+                        )
+                    }
+                </Popup>
       {displayedData.map(post => (
                     <div key={post.id} className="post">
+                      {post.id != inEditing? 
+                      <>
                        <span>id: {post.id}</span> 
                        <span>{post.title}</span>
-                     <span onClick={()=>OpenOrClosePost(post)} style={{color:"red"}}>{selectedPostId==post.id ? <IoIosArrowDown />:<IoIosArrowBack />}</span>
-                     {selectedPostId==post.id&&<Outlet/>}
+                       <span onClick={()=>OpenOrClosePost(post)} style={{color:"red"}}>{selectedPostId==post.id ? <IoIosArrowDown onClick={()=> setSelectedPostId(post.id)}/>:<IoIosArrowBack onClick={()=> setSelectedPostId(-1)}/>}</span>
+                       {selectedPostId==post.id && 
+                       <> 
+                        <p>{post.body}</p> <button >view comments</button> 
+                       { post.userId==userId&& <><span onClick={() => deletePost(post.id)}><RiDeleteBin7Fill /></span>
+                        <span onClick={() => setInEditing(post.id)}><MdOutlineEdit /></span></>}
+                       </>}
+                      </>
+                       :<UpdatePost post={post} setInEditing={setInEditing} setAllData={setAllData}/>}
                     </div>
                 ))}
+
     </InfiniteScroll>
             </div>
         </>
@@ -266,7 +301,7 @@ export default Posts;
 //                        <span>id: {post.id}</span> 
 //                        <span>{post.title}</span>
 //                      <span onClick={()=>OpenOrClosePost(post)} style={{color:"red"}}>{selectedPostId==post.id ? <IoIosArrowDown />:<IoIosArrowBack />}</span>
-//                      {selectedPostId==post.id&&<Outlet/>}
+//                      {selectedPostId==post.id && <Outlet/>}
 //                     </div>
 //                 ))}
 //                 <ReactPaginate

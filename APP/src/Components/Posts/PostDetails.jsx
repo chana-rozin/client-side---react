@@ -1,11 +1,14 @@
 import { Link, useLocation } from "react-router-dom"
 
-const PostDetails=()=>{
-    const location = useLocation();
-    const {postBody} = location.state;
-    console.log(postBody)
+const PostDetails = (props) => {
+    const { post, setAllData } = props;
 
-    return(<><p>{postBody} </p></>)
+    return (
+        <>
+            <p>{post.body} </p>
+            
+        </>)
+
 }
 
 export default PostDetails
