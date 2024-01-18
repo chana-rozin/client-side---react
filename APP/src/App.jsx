@@ -5,7 +5,7 @@ import Register from './Components/Register/Register'
 import Todos from './Components/Todos/Todos'
 import Albums from './Components/Albums/Albums'
 import Posts from './Components/Posts/Posts'
-import Comments from './Components/Posts/Comment'
+// import Comments from './Components/Posts/Comment'
 import PostDetails from './Components/Posts/PostDetails'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
@@ -30,7 +30,7 @@ function App() {
             <Route path='/users/:userId/todos' element={currentUser != null ? <Todos /> : <LogIn />}/>
             <Route path='/users/:userId/albums' element={currentUser != null ? <Albums /> : <LogIn />} />
             <Route path='/users/:userId/posts' element={currentUser != null ? <Posts /> : <LogIn />} >
-              <Route path=':postId/comments' element={<Comments/>}/>
+              {/* <Route path=':postId/comments' element={<Comments/>}/> */}
             </Route>
             <Route path='*' element={<div><h2>404 Page not found</h2></div>} />
           </Routes>
