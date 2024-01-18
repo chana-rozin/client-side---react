@@ -69,8 +69,8 @@ const AddPost = (props) => {
             <p>add your post:</p>
             <div>
                 <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input type="checkbox" name="completed"></input></span>
-                    <span><input placeholder="your todo title:" type="text" name="title"></input></span>
+                    <span><input placeholder="your post title:" type="text" name="title"></input></span>
+                    <span><input placeholder="your post body:" type="text" name="body"></input></span>
                     <button type="submit">add</button>
                 </form>
             </div>
@@ -79,4 +79,4 @@ const AddPost = (props) => {
 }
 
 
-export default AddTodo
+export default AddPost
