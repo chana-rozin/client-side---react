@@ -11,6 +11,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import UpdatePost from './UpdatePost';
 import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
+import AddPost from './AddPost';
 const Posts = () => {
   const itemsPerPage = 20;
   const [hasMore, setHasMore] = useState(true);
