@@ -9,7 +9,7 @@ const UpdateComment = (props) => {
     comment.body = event.target.body.value;
     fetch(`http://localhost:3000/comments/${comment.id}`, {
       method: 'PATCH',
-      body: JSON.stringify({body: post.body,}),
+      body: JSON.stringify({body: comment.body,}),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -21,7 +21,7 @@ const UpdateComment = (props) => {
           setCommentsData(prevArr=>prevArr.map(el=>el.id===comment.id?comment:el));
         }
         else{
-          console.error("failed to update post");
+          console.error("failed to update comment");
         }
       })
   

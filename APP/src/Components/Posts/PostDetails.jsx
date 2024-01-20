@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
+import UpdatePost from "./UpdatePost";
 
 const PostDetails = (props) => {
     const navigate = useNavigate()
@@ -11,13 +12,17 @@ const PostDetails = (props) => {
     const { post, setAllData, inEditing, setInEditing, setSelectedPostId } = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
+
     function deletePost(id) {
         setAllData(prevArr => prevArr.filter(post => post.id != id));
 
         fetch(`http://localhost:3000/posts/${id}`, {
             method: 'DELETE',
         })
-            .then(re => console.log(re));
+            .then(re => { if (href.endsWith("/comments"))
+            navigate(-1);
+        setSelectedPostId(-1);})
+        .catch(error=>console.error(error));
     }
 
     function closePost() {

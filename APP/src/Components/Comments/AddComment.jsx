@@ -3,12 +3,12 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
 const AddComment = (props) => {
 
-    const {postId, setAllData, closePopUp,setIsAdded} = props;
+    const {postId, setCommentsData, closePopUp} = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const navigate = useNavigate();
 
     const comment = {
-        "postId": {postId},
+        "postId": postId,
         "id": "",
         "name": "",
         "email": currentUser.email,
@@ -16,7 +16,7 @@ const AddComment = (props) => {
       }
     async function handleAddBtn(event) {
         event.preventDefault();
-        comment.name = event.target.title.value;
+        comment.name = event.target.name.value;
         comment.body = event.target.body.value;
         comment.id = await getCommentId();
         addComment();
@@ -26,7 +26,7 @@ const AddComment = (props) => {
     async function addComment() {
         await fetch("http://localhost:3000/comments", {
             method: 'POST',
-            body: JSON.stringify(post),
+            body: JSON.stringify(comment),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -34,8 +34,7 @@ const AddComment = (props) => {
             .then((response) => {
                 if (response.status === 201) {
                     increaseCommentId();
-                    setAllData(prevArr=>[...prevArr,post]);
-                    setIsAdded(true);
+                    setCommentsData(prevArr=>[...prevArr,comment]);
                 }
                 else {
                     setErrMessage("500 something get worng:( try latter.")
@@ -55,7 +54,7 @@ const AddComment = (props) => {
     }
 
 
-    async function getPostId() {
+    async function getCommentId() {
         const id = await fetch("http://localhost:3000/config/1")
             .then(result => result.json())
             .then(json => json.commentId.toString())

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import InfiniteScroll from "react-infinite-scroller";
 import { IoIosArrowBack } from "react-icons/io";
@@ -30,10 +30,12 @@ const Posts = () => {
   };
 
     const navigate = useNavigate();
+    let {userId, postId} = useParams();
     const { currentUser, setCurrentUser } = useContext(userContext);
-    const userId = currentUser.id;
+    userId = currentUser.id;
     const [filtersArr, setFiltersArr] = useState([{"key":"userId" , "value":userId.toString()}]);
-    const [selectedPostId, setSelectedPostId] = useState(-1)
+    const href = location.href
+    const [selectedPostId, setSelectedPostId] = useState(postId??-1)
     const [displayedData, setDisplayedData] = useState([]);
     const [allData, setAllData] = useState([]);
     const [displayMode, setDisplayMode] = useState("myPosts");
