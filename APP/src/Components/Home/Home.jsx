@@ -8,7 +8,7 @@ const Home = ()=>{
     const {currentUser, setCurrentUser} = useContext(userContext);
     const userId= currentUser.id;
     function handleLogout(){
-        localStorage.clear();
+        localStorage.removeItem("currentUser");
         navigate("/login");
         setCurrentUser(null);
     }

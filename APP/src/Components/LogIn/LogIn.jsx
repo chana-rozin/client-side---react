@@ -21,6 +21,7 @@ const LogIn=()=>{
    }
 
    function navToHomePage(userDetails){
+    delete userDetails["website"]
     localStorage.setItem("currentUser", JSON.stringify(userDetails));
     navigate("/home");
     setCurrentUser(userDetails);
