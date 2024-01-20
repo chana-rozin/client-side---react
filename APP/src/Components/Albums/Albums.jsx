@@ -6,9 +6,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 // import './Albums.css'; // Import a separate CSS file for styling
 import { userContext } from "../../App";
-import { RiDeleteBin7Fill } from "react-icons/ri";
-import { MdOutlineEdit } from "react-icons/md";
-import UpdateAlbum from './UpdateAlbum';
 import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
 import AddAlbum from './AddAlbum';
@@ -38,7 +35,6 @@ const Albums = () => {
     const [selectedAlbumId, setSelectedAlbumId] = useState(-1)
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
     const [myAlbums, setMyAlbums] = useState([]);
-    const [inEditing,setInEditing] = useState(-1);
     const [isAdded, setIsAdded] = useState(false);
 
 
@@ -100,30 +96,10 @@ const Albums = () => {
         else return [...filtersArr,  { key: keyToUpdate, value }];
     }
 
-   function OpenOrCloseAlbums(album){
-    if(selectedAlbumId==album.id)
-    {
-        setSelectedAlbumId(-1);
-    }
-    else{
-        setSelectedAlbumId(album.id);
-        console.log(album.id)
-    }
-   }
-
-
-   function deleteAlbum(id) {
-    setMyAlbums(prevArr => prevArr.filter(album => album.id != id));
-    fetch(`http://localhost:3000/albums/${id}`,{
-        method: 'DELETE',})
-        .then(re=>console.log(re));
-}
-
 
     return (
         <>
          <div>
-               
                 <label> serach by:
                     <label htmlFor="searchById">ID</label>
                     <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
@@ -154,14 +130,10 @@ const Albums = () => {
 
                 {displayedAlbums.map(album => (
                     <div key={album.id} className="post">
-                    {album.id != inEditing?
                     <>
                        <span>id: {album.id}</span> 
                        <span>title: {album.title}</span>
-                       <span onClick={() => deleteAlbum(album.id)}><RiDeleteBin7Fill /></span>
-                        <span onClick={() => setInEditing(album.id)}><MdOutlineEdit /></span>
                        </> 
-                     : <UpdateAlbum album={album} setMyAlbums={setMyAlbums} inEditing={inEditing} setInEditing={setInEditing} setSelectedAlbumId={setSelectedAlbumId}/>}
                     </div>
                 ))}
     </InfiniteScroll>
