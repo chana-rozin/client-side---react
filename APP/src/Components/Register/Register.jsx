@@ -90,7 +90,8 @@ const Register = () => {
                             "Content-type": "application/json; charset=UTF-8",
                         },
                     }).then().catch(err => console.error(err))
-                    localStorage.setItem("currentUser", JSON.stringify(user))
+                    delete user["website"]
+                    localStorage.setItem("currentUser", JSON.stringify(user));
                     navigate("/home", { replace: true });
                 }
                 else {
