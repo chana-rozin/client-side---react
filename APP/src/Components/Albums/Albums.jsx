@@ -135,23 +135,22 @@ const Albums = () => {
             <InfiniteScroll
             pageStart={0}
             loadMore={loadMore}
-
             hasMore={hasMore}
             loader={<h4 className="loader">Loading...</h4>}
             useWindow={false}>
-         <Popup trigger=
-                    {<FiPlusCircle />}
-                    position="down">
-                    {
-                        close => (
-                            <div className='modal'>
-                                <div className='content'>
-                                    <AddAlbum setIsAdded={setIsAdded} setMyAlbums={setMyAlbums} closePopUp={close} />
-                                </div>
+            <Popup trigger=
+                {<FiPlusCircle />}
+                position="down">
+                {
+                    close => (
+                        <div className='modal'>
+                            <div className='content'>
+                                <AddAlbum setIsAdded={setIsAdded} setMyAlbums={setMyAlbums} closePopUp={close} />
                             </div>
-                        )
-                    }
-                </Popup>
+                        </div>
+                    )
+                }
+            </Popup>
 
                 {displayedAlbums.map(album => (
                     <div key={album.id} className="post">

@@ -8,16 +8,16 @@ const AddAlbum = (props) => {
     const userId = currentUser.id;
     const navigate = useNavigate();
 
-    const Album = {
+    const album = {
         "userId": "0",
         "id": "0",
         "title": ""
       }
     async function handleAddBtn(event) {
         event.preventDefault();
-        post.userId = userId;
-        post.title = event.target.title.value;
-        post.id = await getAlbumId();
+        album.userId = userId;
+        album.title = event.target.title.value;
+        album.id = await getAlbumId();
         addAlbum();
         closePopUp();
     }
@@ -45,7 +45,7 @@ const AddAlbum = (props) => {
     function increaseAlbumId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "postId": (Number)(post.id) + 1 }),
+            body: JSON.stringify({ "albumId": (Number)(album.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
@@ -57,18 +57,17 @@ const AddAlbum = (props) => {
     async function getAlbumId() {
         const id = await fetch("http://localhost:3000/config/1")
             .then(result => result.json())
-            .then(json => json.postId.toString())
+            .then(json => json.albumId.toString())
             .catch(error => console.error(error));
         return id;
     }
 
     return (
         <>
-            <p>add your post:</p>
+            <p>add your album:</p>
             <div>
                 <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input placeholder="your post title:" type="text" name="title"></input></span>
-                    <span><input placeholder="your post body:" type="text" name="body"></input></span>
+                    <span><input placeholder="your album title:" type="text" name="title"></input></span>
                     <button type="submit">add</button>
                 </form>
             </div>
