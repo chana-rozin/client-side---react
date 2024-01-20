@@ -46,7 +46,7 @@ const AddComment = (props) => {
     function increaseCommentId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "postId": (Number)(post.id) + 1 }),
+            body: JSON.stringify({ "commentId": (Number)(comment.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
@@ -58,18 +58,18 @@ const AddComment = (props) => {
     async function getPostId() {
         const id = await fetch("http://localhost:3000/config/1")
             .then(result => result.json())
-            .then(json => json.postId.toString())
+            .then(json => json.commentId.toString())
             .catch(error => console.error(error));
         return id;
     }
 
     return (
         <>
-            <p>add your post:</p>
+            <p>add your comment:</p>
             <div>
                 <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input placeholder="your post title:" type="text" name="title"></input></span>
-                    <span><input placeholder="your post body:" type="text" name="body"></input></span>
+                    <span><input placeholder="name" type="text" name="name" required></input></span>
+                    <span><input placeholder="your text here" type="text" name="body" required></input></span>
                     <button type="submit">add</button>
                 </form>
             </div>
