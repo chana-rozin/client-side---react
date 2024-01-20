@@ -96,22 +96,10 @@ const Albums = () => {
         else return [...filtersArr,  { key: keyToUpdate, value }];
     }
 
-   function OpenOrCloseAlbums(album){
-    if(selectedAlbumId==album.id)
-    {
-        setSelectedAlbumId(-1);
-    }
-    else{
-        setSelectedAlbumId(album.id);
-        console.log(album.id)
-    }
-   }
-
 
     return (
         <>
          <div>
-               
                 <label> serach by:
                     <label htmlFor="searchById">ID</label>
                     <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
