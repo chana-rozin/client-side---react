@@ -11,7 +11,7 @@ const UpdatePost = (props) => {
     fetch(`http://localhost:3000/posts/${post.id}`, {
       method: 'PATCH',
       body: JSON.stringify({title: post.title,
-                            body: post.body}),
+                            body: post.body,}),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

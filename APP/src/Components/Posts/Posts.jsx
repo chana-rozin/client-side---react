@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import InfiniteScroll from "react-infinite-scroller";
 import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
+import PostDetails from "./PostDetails"
+
 import './Posts.css'; // Import a separate CSS file for styling
 import { userContext } from "../../App";
-import { RiDeleteBin7Fill } from "react-icons/ri";
-import { MdOutlineEdit } from "react-icons/md";
+
 import UpdatePost from './UpdatePost';
 import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
 import AddPost from './AddPost';
+
 const Posts = () => {
   const itemsPerPage = 20;
   const [hasMore, setHasMore] = useState(true);
@@ -97,26 +98,8 @@ const Posts = () => {
         else return [...filtersArr,  { key: keyToUpdate, value }];
     }
 
-   function OpenOrClosePost(post){
-    if(selectedPostId==post.id)
-    {
-        setSelectedPostId(-1);
-       
-    }
-    else{
-        setSelectedPostId(post.id);
-        console.log(post.id)
-    }
-   }
 
-
-    function deletePost(id) {
-        setAllData(prevArr => prevArr.filter(post => post.id != id));
-
-        fetch(`http://localhost:3000/posts/${id}`,{
-            method: 'DELETE',})
-            .then(re=>console.log(re));
-    }
+   
 
     return (
         <>
@@ -140,7 +123,7 @@ const Posts = () => {
             hasMore={hasMore}
             loader={<h4 className="loader">Loading...</h4>}
             useWindow={false}>
-         <Popup trigger=
+            <Popup trigger=
                     {<FiPlusCircle />}
                     position="down">
                     {
@@ -155,19 +138,12 @@ const Posts = () => {
                 </Popup>
       {displayedData.map(post => (
                     <div key={post.id} className="post">
-                      {post.id != inEditing? 
-                      <>
+                      {selectedPostId!=post.id ?  <>
                        <span>id: {post.id}</span> 
                        <span>{post.title}</span>
-                       <span onClick={()=>OpenOrClosePost(post)} style={{color:"red"}}>{selectedPostId==post.id ? <IoIosArrowDown onClick={()=> setSelectedPostId(post.id)}/>:<IoIosArrowBack onClick={()=> setSelectedPostId(-1)}/>}</span>
-                       {selectedPostId==post.id && 
-                       <> 
-                        <p>{post.body}</p> <button >view comments</button> 
-                       { post.userId==userId&& <><span onClick={() => deletePost(post.id)}><RiDeleteBin7Fill /></span>
-                        <span onClick={() => setInEditing(post.id)}><MdOutlineEdit /></span></>}
-                       </>}
-                      </>
-                       :<UpdatePost post={post} setInEditing={setInEditing} setAllData={setAllData}/>}
+                      <button disabled={selectedPostId!=-1}  onClick={()=> setSelectedPostId(post.id)}><IoIosArrowBack /></button>
+                       </> 
+                     : <PostDetails post={post} setAllData={setAllData} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId}/>}
                     </div>
                 ))}
 

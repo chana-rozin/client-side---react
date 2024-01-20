@@ -5,7 +5,7 @@ import Register from './Components/Register/Register'
 import Todos from './Components/Todos/Todos'
 import Albums from './Components/Albums/Albums'
 import Posts from './Components/Posts/Posts'
-// import Comments from './Components/Posts/Comment'
+import Comments from './Components/Comments/Comments'
 import PostDetails from './Components/Posts/PostDetails'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
@@ -31,7 +31,7 @@ function App() {
               <Route path='todos' element={currentUser != null ? <Todos /> : <LogIn />} />
               <Route path='albums' element={currentUser != null ? <Albums /> : <LogIn />} />
               <Route path='posts' element={currentUser != null ? <Posts /> : <LogIn />} >
-                {/* <Route path=':postId/comments' element={<Comments/>}/> */}
+                <Route path=':postId/comments' element={<Comments />} />
               </Route>
             </Route>
 
