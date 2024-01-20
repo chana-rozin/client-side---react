@@ -1944,16 +1944,6 @@
       "userId": "10",
       "id": "100",
       "title": "enim repellat iste"
-    },
-    {
-      "id": "101",
-      "userId": "1",
-      "title": "a"
-    },
-    {
-      "id": "102",
-      "userId": "1",
-      "title": "thgd"
     }
   ],
   "photos": [
@@ -41075,7 +41065,7 @@
       "todoId": 210,
       "postId": 101,
       "commentId": 501,
-      "albumId": 103
+      "albumId": 101
     }
   ]
 }
