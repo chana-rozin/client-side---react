@@ -27,11 +27,14 @@ function App() {
             <Route path='/login' element={<LogIn />} />
             <Route path='/home' element={currentUser != null ? <Home /> : <LogIn />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/users/:userId/todos' element={currentUser != null ? <Todos /> : <LogIn />}/>
-            <Route path='/users/:userId/albums' element={currentUser != null ? <Albums /> : <LogIn />} />
-            <Route path='/users/:userId/posts' element={currentUser != null ? <Posts /> : <LogIn />} >
-              {/* <Route path=':postId/comments' element={<Comments/>}/> */}
+            <Route path='/users/:userId'>
+              <Route path='todos' element={currentUser != null ? <Todos /> : <LogIn />} />
+              <Route path='albums' element={currentUser != null ? <Albums /> : <LogIn />} />
+              <Route path='posts' element={currentUser != null ? <Posts /> : <LogIn />} >
+                {/* <Route path=':postId/comments' element={<Comments/>}/> */}
+              </Route>
             </Route>
+
             <Route path='*' element={<div><h2>404 Page not found</h2></div>} />
           </Routes>
         </Router>
