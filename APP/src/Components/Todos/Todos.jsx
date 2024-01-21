@@ -133,7 +133,7 @@ const Todos = () => {
 
                 (<div key={index} props={inEditing}>
                     {index != inEditing ? <>
-                        <span><input type="checkbox" name="completed" checked={todo.completed} /></span>
+                        <span><input readOnly type="checkbox" name="completed" checked={todo.completed} /></span>
                         <span>id: {index + 1} </span>
                         <span> {todo.title}</span>
                         <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
