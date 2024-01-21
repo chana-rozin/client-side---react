@@ -36,6 +36,7 @@ const Comments = () => {
         })
             .then(re => console.log(re));
     }
+    console.log(currentUser);
 
     return (<>
     <div> <Popup trigger=

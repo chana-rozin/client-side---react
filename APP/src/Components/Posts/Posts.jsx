@@ -14,21 +14,9 @@ import { FiPlusCircle } from "react-icons/fi";
 import AddPost from './AddPost';
 
 const Posts = () => {
-  const itemsPerPage = 20;
-  const [hasMore, setHasMore] = useState(true);
-  const [records, setrecords] = useState(itemsPerPage);
-
-  const loadMore = () => {
-    if (records === displayedData.length) {
-      setHasMore(false);
-    }
-    else {
-      setTimeout(() => {
-        setrecords(records + itemsPerPage);
-      }, 2000);
-    }
-  };
-
+    const itemsPerPage = 20;
+    const [hasMore, setHasMore] = useState(true);
+    const [records, setrecords] = useState(itemsPerPage);
     const navigate = useNavigate();
     let {userId, postId} = useParams();
     const { currentUser, setCurrentUser } = useContext(userContext);
@@ -43,6 +31,17 @@ const Posts = () => {
     const [isAdded, setIsAdded] = useState(false);
 
 
+    const loadMore = () => {
+        if (records === displayedData.length) {
+        setHasMore(false);
+        }
+        else {
+        setTimeout(() => {
+            setrecords(records + itemsPerPage);
+        }, 2000);
+        }
+    };
+  
 
     const fetchPosts = async () => {
         try {
@@ -62,7 +61,6 @@ const Posts = () => {
         fetchPosts();
     }, []); // Call fetchPosts when the component mounts
 
-    
 
     function filterAllPosts() {
         
@@ -76,6 +74,7 @@ const Posts = () => {
         
     }
 
+
     function handleFilter(filterKey, inputValue) {
         const updateFilters = inputValue === ""
             ? removeFilter(filterKey)
@@ -83,13 +82,12 @@ const Posts = () => {
     
         setFiltersArr(updateFilters);
     }
-    
-
    
 
     function removeFilter(keyToRemove) {
         return filtersArr.filter(el => el.key !== keyToRemove);
     }
+
 
     function updateOrAddFilter(keyToUpdate, value) {
         
@@ -101,57 +99,53 @@ const Posts = () => {
     }
 
 
-   
-
     return (
         <>
          <div>
-               
                 <label> serach by:
                     <label htmlFor="searchById">ID</label>
                     <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
                     <label htmlFor="searchByTitle">Title</label>
                     <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
                 </label>
-            </div>
-            {displayMode==="myPosts"? <button onClick={()=>{setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts")}} >press to view all posts</button>
-            :<button onClick={()=>{setFiltersArr(updateOrAddFilter("userId",userId)); setDisplayMode("myPosts")}} >press to view only my posts</button>}
+        </div>
+        {displayMode==="myPosts"? <button onClick={()=>{setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts")}} >press to view all posts</button>
+        :<button onClick={()=>{setFiltersArr(updateOrAddFilter("userId",userId)); setDisplayMode("myPosts")}} >press to view only my posts</button>}
 
-            <div>
-            <InfiniteScroll
+        <div>
+        <InfiniteScroll
             pageStart={0}
             loadMore={loadMore}
-
             hasMore={hasMore}
             loader={<h4 className="loader">Loading...</h4>}
             useWindow={false}>
             <Popup trigger=
-                    {<FiPlusCircle />}
-                    position="down">
-                    {
-                        close => (
-                            <div className='modal'>
-                                <div className='content'>
-                                    <AddPost setIsAdded={setIsAdded} setAllData={setAllData} closePopUp={close} />
-                                </div>
+                {<FiPlusCircle />}
+                position="down">
+                {
+                    close => (
+                        <div className='modal'>
+                            <div className='content'>
+                                <AddPost setIsAdded={setIsAdded} setAllData={setAllData} closePopUp={close} />
                             </div>
-                        )
-                    }
-                </Popup>
-      {displayedData.map(post => (
-                    <div key={post.id} className="post">
-                      {selectedPostId!=post.id ?  <>
-                       <span>id: {post.id}</span> 
-                       <span>{post.title}</span>
-                      <button disabled={selectedPostId!=-1}  onClick={()=> setSelectedPostId(post.id)}><IoIosArrowBack /></button>
-                       </> 
-                     : <PostDetails post={post} setAllData={setAllData} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId}/>}
-                    </div>
-                ))}
+                        </div>
+                    )
+                }
+            </Popup>
+            {displayedData.map(post => (
+                            <div key={post.id} className="post">
+                            {selectedPostId!=post.id ?  <>
+                            <span>id: {post.id}</span> 
+                            <span>{post.title}</span>
+                            <button disabled={selectedPostId!=-1}  onClick={()=> setSelectedPostId(post.id)}><IoIosArrowBack /></button>
+                            </> 
+                            : <PostDetails post={post} setAllData={setAllData} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId}/>}
+                            </div>
+                        ))}
 
-    </InfiniteScroll>
-            </div>
-        </>
+        </InfiniteScroll>
+        </div>
+    </>
     );
 };
 

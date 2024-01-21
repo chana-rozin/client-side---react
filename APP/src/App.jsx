@@ -7,6 +7,7 @@ import Albums from './Components/Albums/Albums'
 import Posts from './Components/Posts/Posts'
 import Comments from './Components/Comments/Comments'
 import Info from './Components/Info/Info'
+import Photos from './Components/Photos/Photos'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -30,7 +31,10 @@ function App() {
             <Route path='/users/:userId'>
               <Route path='info' element={currentUser != null ? <Info/> : <LogIn />}></Route>
               <Route path='todos' element={currentUser != null ? <Todos /> : <LogIn />} />
-              <Route path='albums' element={currentUser != null ? <Albums /> : <LogIn />} />
+              <Route path='albums'>
+                <Route index element={currentUser != null ? <Albums /> : <LogIn />} />
+                <Route path=':albumId/photos' element={<Photos />} />
+              </Route>
               <Route path='posts' element={currentUser != null ? <Posts /> : <LogIn />} >
                 <Route path=':postId/comments' element={<Comments />} />
               </Route>
