@@ -24,8 +24,8 @@ const Photos = () => {
             .then(response => response.json())
             .then(data => {
                 setPhotosArr(photosArr.concat(data));
-                setHasMore(data.length === 10)
-                setStart(prev => prev + 10)
+                setHasMore(data.length === 12)
+                setStart(prev => prev + 12)
             })
             .catch(error =>
                 console.error(error));

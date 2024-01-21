@@ -6,10 +6,10 @@ const UpdatePhoto = (props) => {
 
   async function handlePhotoUpdate(event) {
     event.preventDefault();
-    photo.body = event.target.title.value;
+    photo.title = event.target.title.value;
     fetch(`http://localhost:3000/photos/${photo.id}`, {
       method: 'PATCH',
-      body: JSON.stringify({title: photo.title,}),
+      title: JSON.stringify({title: photo.title,}),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
