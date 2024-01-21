@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { userContext } from "../../App";
 
 const Register = () => {
     const [password, setPassword] = useState("");
@@ -8,6 +9,7 @@ const Register = () => {
     const [isPwVerified, setIsPwVerified] = useState(false);
     const [errMessage, setErrMessage] = useState("");
     const [registerStep, setRgisterStep] = useState(1);
+    const { currentUser, setCurrentUser } = useContext(userContext);
     const navigate = useNavigate();
     const user = {
         "id": 0,
@@ -92,6 +94,7 @@ const Register = () => {
                     }).then().catch(err => console.error(err))
                     delete user["website"]
                     localStorage.setItem("currentUser", JSON.stringify(user));
+                    setCurrentUser(user);
                     navigate("/home", { replace: true });
                 }
                 else {
