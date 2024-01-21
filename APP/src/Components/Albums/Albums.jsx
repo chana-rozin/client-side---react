@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import InfiniteScroll from "react-infinite-scroller";
 import { IoIosArrowBack } from "react-icons/io";
@@ -128,15 +128,15 @@ const Albums = () => {
                 }
             </Popup>
 
-                {displayedAlbums.map(album => (
-                    <div key={album.id} className="post">
-                    <>
-                       <span>id: {album.id}</span> 
-                       <span>title: {album.title}</span>
-                       </> 
-                    </div>
-                ))}
-    </InfiniteScroll>
+            {displayedAlbums.map(album => (
+                <div key={album.id} className="album">
+                <>
+                    <span>id: {album.id}</span> 
+                    <Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}> title: {album.title}</Link>
+                </> 
+                </div>
+            ))}
+            </InfiniteScroll>
             </div>
         </>
     );
