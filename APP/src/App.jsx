@@ -8,6 +8,7 @@ import Posts from './Components/Posts/Posts'
 import Comments from './Components/Comments/Comments'
 import Info from './Components/Info/Info'
 import Photos from './Components/Photos/Photos'
+import Layout from './Components/Layout/Layout'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -26,17 +27,19 @@ function App() {
           <Routes>
             <Route path='/' element={<Navigate to={currentUser != null ? "/home" : "/Login"} />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/home' element={currentUser != null ? <Home /> : <Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/users/:userId'>
-              <Route path='info' element={currentUser != null ? <Info/> : <Login />}></Route>
-              <Route path='todos' element={currentUser != null ? <Todos /> : <Login />} />
-              <Route path='albums'>
-                <Route index element={currentUser != null ? <Albums /> : <Login />} />
-                <Route path=':albumId/photos' element={<Photos />} />
-              </Route>
-              <Route path='posts' element={currentUser != null ? <Posts /> : <Login />} >
-                <Route path=':postId/comments' element={<Comments />} />
+            <Route element={<Layout />}>
+            <Route path='/home' element={currentUser != null ? <Home /> : <Login />} />
+              <Route path='/users/:userId'>
+                <Route path='info' element={currentUser != null ? <Info /> : <Login />}></Route>
+                <Route path='todos' element={currentUser != null ? <Todos /> : <Login />} />
+                <Route path='albums'>
+                  <Route index element={currentUser != null ? <Albums /> : <Login />} />
+                  <Route path=':albumId/photos' element={<Photos />} />
+                </Route>
+                <Route path='posts' element={currentUser != null ? <Posts /> : <Login />} >
+                  <Route path=':postId/comments' element={<Comments />} />
+                </Route>
               </Route>
             </Route>
 
