@@ -1,44 +1,47 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 
 const UpdateTodo = (props) => {
-  const { todo, setInEditing, setTodosArr } = props;
+    const { todo, setInEditing, setTodosArr } = props;
 
-  async function handleTodoUpdate(event) {
-    event.preventDefault();
-    todo.title = event.target.title.value;
-    todo.completed = event.target.completed.checked;
-    fetch(`http://localhost:3000/todos/${todo.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(todo),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then(response =>{
-        if(response.ok)
-        {
-          
-          setInEditing(-1);
-          setTodosArr(prevArr=>prevArr.map(el=>el.id===todo.id?todo:el));
+    const handleTodoUpdate = async (event) => {
+        event.preventDefault();
+        const updatedTodo = {
+            ...todo,
+            title: event.target.title.value,
+            completed: event.target.completed.checked,
+        };
+
+        try {
+            const response = await fetch(`http://localhost:3000/todos/${todo.id}`, {
+                method: "PUT",
+                body: JSON.stringify(updatedTodo),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+
+            if (response.ok) {
+                setInEditing(-1);
+                setTodosArr((prevArr) => prevArr.map((el) => (el.id === todo.id ? updatedTodo : el)));
+            } else {
+                console.error("Failed to update todo");
+            }
+        } catch (error) {
+            console.error(error);
         }
-        else{
-          console.error("failed to update todo");
-        }
-      })
-  
-      .catch(err => console.error(err))
+    };
 
-  }
+    return (
+        <>
+            <form onSubmit={(e) => handleTodoUpdate(e)}>
+                <span>
+                    <input type="checkbox" name="completed" defaultChecked={todo.completed} />
+                </span>
+                <input type="text" name="title" defaultValue={todo.title} />
+                <input type="submit" value="update" />
+            </form>
+        </>
+    );
+};
 
-  return (
-    <>
-      <form onSubmit={(e) => handleTodoUpdate(e)}>
-        <span><input type="checkbox" name="completed" defaultChecked={todo.completed} /></span>
-        <input type="text" name="title" defaultValue={todo.title} ></input>
-        <input type="submit" value="update"></input>
-      </form>
-    </>
-  );
-}
-export default UpdateTodo
+export default UpdateTodo;

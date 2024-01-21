@@ -13,86 +13,90 @@ const Photos = () => {
     const location = useLocation()
     const { albumId, albumTitle } = location.state;
     const [photosArr, setPhotosArr] = useState([]);
-    const [inEditing, setInEditing] = useState(-1);
+    const [inEditingPhotoId, setInEditingPhotoId] = useState(-1);
     const { currentUser, setCurrentUser } = useContext(userContext);
     const [start, setStart] = useState(0);
     const photosPerFetch = 12;
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMorePhotos, setHasMorePhotos] = useState(true);
 
-    const fetchPhotos = async () =>
-        fetch(`http://localhost:3000/photos?albumId=${albumId}&_start=${start}&_limit=${photosPerFetch}`)
-            .then(response => response.json())
-            .then(data => {
-                setPhotosArr(photosArr.concat(data));
-                setHasMore(data.length === 12)
-                setStart(prev => prev + 12)
-            })
-            .catch(error =>
-                console.error(error));
-
+    const fetchPhotos = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/photos?albumId=${albumId}&_start=${start}&_limit=${photosPerFetch}`);
+            const data = await response.json();
+            setPhotosArr(prevPhotosArr => [...prevPhotosArr, ...data]);
+            setHasMorePhotos(data.length === 12);
+            setStart(prevStart => prevStart + photosPerFetch);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         fetchPhotos();
     }, []);
 
-
     function deletePhoto(id) {
-        setPhotosArr(prevArr => prevArr.filter(photo => photo.id != id));
+        setPhotosArr(prevArr => prevArr.filter(photo => photo.id !== id));
         fetch(`http://localhost:3000/photos/${id}`, {
             method: 'DELETE',
         })
             .then(re => console.log(re));
     }
 
-
     return (
         <>
-            <div> <Popup trigger=
-                {<FiPlusCircle />}
-                position="down">
-                {
-                    close => (
+            <div>
+                <Popup trigger=
+                    {<FiPlusCircle />}
+                    position="down">
+                    {close => (
                         <div className='modal'>
                             <div className='content'>
                                 <AddPhoto albumId={albumId} setPhotosArr={setPhotosArr} closePopUp={close} />
                             </div>
                         </div>
-                    )
-                }
-            </Popup></div>
+                    )}
+                </Popup>
+            </div>
             <div>
                 {photosArr.map(photo =>
                     <span key={photo.id}>
-                        {inEditing != photo.id ? <>
-                            <div ><b>{photo.title}</b></div>
-                            <img src={photo.thumbnailUrl}></img>
-                            <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
-                            <span onClick={() => setInEditing(photo.id)}><MdOutlineEdit /></span>
-                        </>
-                            : <UpdatePhoto photo={photo} setInEditing={setInEditing} setPhotosArr={setPhotosArr} />}
+                        {inEditingPhotoId !== photo.id ? (
+                            <>
+                                <div><b>{photo.title}</b></div>
+                                <img src={photo.thumbnailUrl} alt={photo.title}></img>
+                                <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
+                                <span onClick={() => setInEditingPhotoId(photo.id)}><MdOutlineEdit /></span>
+                            </>
+                        ) : (
+                            <UpdatePhoto photo={photo} setInEditing={setInEditingPhotoId} setPhotosArr={setPhotosArr} />
+                        )}
                     </span>
                 )}
             </div>
             <InfiniteScroll
-                dataLength={hasMore?photosArr.length - 2:photosArr.length}
+                dataLength={hasMorePhotos ? photosArr.length - 2 : photosArr.length}
                 next={fetchPhotos}
-                hasMore={hasMore}
+                hasMore={hasMorePhotos}
                 loader={<p>Loading...</p>}
                 endMessage={<p>No more data to load.</p>}>
                 {photosArr.map(photo =>
                     <span key={photo.id}>
-                        {inEditing != photo.id ? <>
-                            <div ><b>{photo.title}</b></div>
-                            <img src={photo.thumbnailUrl}></img>
-                            <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
-                            <span onClick={() => setInEditing(photo.id)}><MdOutlineEdit /></span>
-                        </>
-                            : <UpdatePhoto photo={photo} setInEditing={setInEditing} setPhotosArr={setPhotosArr} />}
+                        {inEditingPhotoId !== photo.id ? (
+                            <>
+                                <div><b>{photo.title}</b></div>
+                                <img src={photo.thumbnailUrl} alt={photo.title}></img>
+                                <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
+                                <span onClick={() => setInEditingPhotoId(photo.id)}><MdOutlineEdit /></span>
+                            </>
+                        ) : (
+                            <UpdatePhoto photo={photo} setInEditing={setInEditingPhotoId} setPhotosArr={setPhotosArr} />
+                        )}
                     </span>
                 )}
-
             </InfiniteScroll>
         </>
     )
 }
+
 export default Photos;

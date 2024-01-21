@@ -1,5 +1,5 @@
 import './App.css'
-import LogIn from './Components/LogIn/LogIn'
+import Login from './Components/Login/Login'
 import Home from './Components/Home/Home'
 import Register from './Components/Register/Register'
 import Todos from './Components/Todos/Todos'
@@ -24,18 +24,18 @@ function App() {
       <userContext.Provider value={{ currentUser, setCurrentUser }}>
         <Router>
           <Routes>
-            <Route path='/' element={<Navigate to={currentUser != null ? "/home" : "/login"} />} />
-            <Route path='/login' element={<LogIn />} />
-            <Route path='/home' element={currentUser != null ? <Home /> : <LogIn />} />
+            <Route path='/' element={<Navigate to={currentUser != null ? "/home" : "/Login"} />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/home' element={currentUser != null ? <Home /> : <Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/users/:userId'>
-              <Route path='info' element={currentUser != null ? <Info/> : <LogIn />}></Route>
-              <Route path='todos' element={currentUser != null ? <Todos /> : <LogIn />} />
+              <Route path='info' element={currentUser != null ? <Info/> : <Login />}></Route>
+              <Route path='todos' element={currentUser != null ? <Todos /> : <Login />} />
               <Route path='albums'>
-                <Route index element={currentUser != null ? <Albums /> : <LogIn />} />
+                <Route index element={currentUser != null ? <Albums /> : <Login />} />
                 <Route path=':albumId/photos' element={<Photos />} />
               </Route>
-              <Route path='posts' element={currentUser != null ? <Posts /> : <LogIn />} >
+              <Route path='posts' element={currentUser != null ? <Posts /> : <Login />} >
                 <Route path=':postId/comments' element={<Comments />} />
               </Route>
             </Route>

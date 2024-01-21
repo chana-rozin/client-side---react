@@ -1,83 +1,101 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
-const AddTodo = (props) => {
 
-    const { setTodosArr, closePopUp,setIsAdded} = props;
-    const { currentUser, setCurrentUser } = useContext(userContext);
+const AddTodo = (props) => {
+    const { setTodosArr, closePopUp, setIsAdded } = props;
+    const { currentUser } = React.useContext(userContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
 
-    const todo = {
-        "userId": "0",
-        "id": 0,
-        "title": "",
-        "completed": false
-    }
+    const initialTodo = {
+        userId: "0",
+        id: 0,
+        title: "",
+        completed: false,
+    };
 
-    async function handleAddBtn(event) {
+    const [todo, setTodo] = React.useState({ ...initialTodo });
+
+    const handleAddBtn = async (event) => {
         event.preventDefault();
-        todo.userId = userId;
-        todo.title = event.target.title.value;
-        todo.completed = event.target.completed.checked;
-        todo.id = await getTodoId();
-        addTodo();
+        const updatedTodo = {
+            ...todo,
+            userId,
+            title: event.target.title.value,
+            completed: event.target.completed.checked,
+            id: await getTodoId(),
+        };
+        addTodo(updatedTodo);
         closePopUp();
-    }
+    };
 
-    async function addTodo() {
-        await fetch("http://localhost:3000/todos", {
-            method: 'POST',
-            body: JSON.stringify(todo),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-            .then((response) => {
-                if (response.status === 201) {
-                    increaseTodoId();
-                    setTodosArr(prevArr=>[...prevArr,todo]);
-                    setIsAdded(true);
-                }
-                else {
-                    setErrMessage("500 something get worng:( try latter.")
-                }
-            })
-    }
+    const addTodo = async (newTodo) => {
+        try {
+            const response = await fetch("http://localhost:3000/todos", {
+                method: "POST",
+                body: JSON.stringify(newTodo),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
 
-    function increaseTodoId() {
+            if (response.status === 201) {
+                increaseTodoId();
+                setTodosArr((prevArr) => [...prevArr, newTodo]);
+                setIsAdded(true);
+            } else {
+                console.error("Failed to add todo");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const increaseTodoId = () => {
         fetch("http://localhost:3000/config/1", {
-            method: 'PATCH',
-            body: JSON.stringify({ "todoId": (Number)(todo.id) + 1 }),
+            method: "PATCH",
+            body: JSON.stringify({ todoId: Number(todo.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
-        })
-            .catch(err => console.error(err))
-    }
+        }).catch((err) => console.error(err));
+    };
 
+    const getTodoId = async () => {
+        try {
+            const id = await fetch("http://localhost:3000/config/1")
+                .then((result) => result.json())
+                .then((json) => json.todoId.toString());
 
-    async function getTodoId() {
-        const id = await fetch("http://localhost:3000/config/1")
-            .then(result => result.json())
-            .then(json => json.todoId.toString())
-            .catch(error => console.error(error));
-        return id;
-    }
+            return id;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <>
             <p>add your todo:</p>
             <div>
                 <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input type="checkbox" name="completed"></input></span>
-                    <span><input placeholder="your todo title:" type="text" name="title"></input></span>
+                    <span>
+                        <input type="checkbox" name="completed" />
+                    </span>
+                    <span>
+                        <input
+                            placeholder="your todo title:"
+                            type="text"
+                            name="title"
+                            value={todo.title}
+                            onChange={(e) => setTodo({ ...todo, title: e.target.value })}
+                        />
+                    </span>
                     <button type="submit">add</button>
                 </form>
             </div>
         </>
-    )
-}
+    );
+};
 
-
-export default AddTodo
+export default AddTodo;

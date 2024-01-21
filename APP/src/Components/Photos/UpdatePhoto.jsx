@@ -1,41 +1,41 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 
 const UpdatePhoto = (props) => {
-  const { photo, setInEditing, setPhotosArr } = props;
+    const { photo, setInEditing, setPhotosArr } = props;
 
-  async function handlePhotoUpdate(event) {
-    event.preventDefault();
-    photo.title = event.target.title.value;
-    fetch(`http://localhost:3000/photos/${photo.id}`, {
-      method: 'PATCH',
-      title: JSON.stringify({title: photo.title,}),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then(response =>{
-        if(response.ok)
-        {
-          setInEditing(-1);
-          setPhotosArr(prevArr=>prevArr.map(el=>el.id===photo.id?photo:el));
+    async function handlePhotoUpdate(event) {
+        event.preventDefault();
+        const updatedTitle = event.target.title.value;
+
+        try {
+            const response = await fetch(`http://localhost:3000/photos/${photo.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ title: updatedTitle }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+
+            if (response.ok) {
+                const updatedPhoto = { ...photo, title: updatedTitle };
+                setInEditing(-1);
+                setPhotosArr(prevArr => prevArr.map(el => (el.id === photo.id ? updatedPhoto : el)));
+            } else {
+                console.error("Failed to update photo");
+            }
+        } catch (error) {
+            console.error(error);
         }
-        else{
-          console.error("failed to update comment");
-        }
-      })
-  
-      .catch(err => console.error(err))
+    }
 
-  }
+    return (
+        <>
+            <form onSubmit={(e) => handlePhotoUpdate(e)}>
+                <input type="text" name="title" defaultValue={photo.title} />
+                <button type="submit">Update</button>
+            </form>
+        </>
+    );
+};
 
-  return (
-    <>
-      <form onSubmit={(e) => handlePhotoUpdate(e)}>
-        <input type="text" name="title" defaultValue={photo.title} />
-        <input type="submit" value="update"></input>
-      </form>
-    </>
-  );
-}
-export default UpdatePhoto
+export default UpdatePhoto;

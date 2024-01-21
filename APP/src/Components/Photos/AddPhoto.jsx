@@ -1,54 +1,55 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 
 const AddPhoto = (props) => {
-
-    const {albumId, setPhotosArr, closePopUp} = props;
-    const { currentUser, setCurrentUser } = useContext(userContext);
+    const { albumId, setPhotosArr, closePopUp } = props;
+    const { currentUser } = useContext(userContext);
     const navigate = useNavigate();
 
-    const photo = {
-      "albumId": albumId,
-      "id": "0",
-      "title": "",
-      "url": "",
-      "thumbnailUrl": ""
-    }
+    const newPhoto = {
+        albumId: albumId,
+        id: "0",
+        title: "",
+        url: "",
+        thumbnailUrl: ""
+    };
 
     async function handleAddBtn(event) {
         event.preventDefault();
-        photo.title = event.target.title.value;
-        photo.url = event.target.url.value;
-        photo.thumbnailUrl = event.target.thumbnailUrl.value;
-        photo.id = await getPhotoId();
+        newPhoto.title = event.target.title.value;
+        newPhoto.url = event.target.url.value;
+        newPhoto.thumbnailUrl = event.target.thumbnailUrl.value;
+        newPhoto.id = await getPhotoId();
         addPhoto();
         closePopUp();
     }
 
     async function addPhoto() {
-        await fetch("http://localhost:3000/photos", {
-            method: 'POST',
-            body: JSON.stringify(photo),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-            .then((response) => {
-                if (response.status === 201) {
-                    increasePhotoId();
-                    setPhotosArr(prevArr=>[...prevArr,photo]);
-                }
-                else {
-                    setErrMessage("500 something get worng:( try latter.")
-                }
-            })
+        try {
+            const response = await fetch("http://localhost:3000/photos", {
+                method: 'POST',
+                body: JSON.stringify(newPhoto),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
+
+            if (response.status === 201) {
+                increasePhotoId();
+                setPhotosArr(prevArr => [...prevArr, newPhoto]);
+            } else {
+                console.error("Failed to add photo");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     function increasePhotoId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "photoId": (Number)(photo.id) + 1 }),
+            body: JSON.stringify({ "photoId": parseInt(newPhoto.id, 10) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
@@ -56,29 +57,30 @@ const AddPhoto = (props) => {
             .catch(err => console.error(err))
     }
 
-
     async function getPhotoId() {
-        const id = await fetch("http://localhost:3000/config/1")
-            .then(result => result.json())
-            .then(json => json.photoId.toString())
-            .catch(error => console.error(error));
-        return id;
+        try {
+            const id = await fetch("http://localhost:3000/config/1")
+                .then(result => result.json())
+                .then(json => json.photoId.toString());
+            return id;
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
         <>
-            <p>add your photo:</p>
+            <p>Add your photo:</p>
             <div>
                 <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input placeholder="title" type="text" name="title"></input></span>
-                    <span><input placeholder="your photo url" type="url" name="url" required></input></span>
-                    <span><input placeholder="your thumbnail url" type="url" name="thumbnailUrl" required></input></span>
-                    <button type="submit">add</button>
+                    <span><input placeholder="Title" type="text" name="title" /></span>
+                    <span><input placeholder="Photo URL" type="url" name="url" required /></span>
+                    <span><input placeholder="Thumbnail URL" type="url" name="thumbnailUrl" required /></span>
+                    <button type="submit">Add</button>
                 </form>
             </div>
         </>
     )
 }
 
-
-export default AddPhoto
+export default AddPhoto;

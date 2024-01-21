@@ -1,81 +1,83 @@
-import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 
 const Register = () => {
-    const [password, setPassword] = useState("");
-    const [verifyPassword, setVerifyPassword] = useState("");
-    const [PW, setPW] = useState({ "password": "", "verifyPW": "" })
-    const [isPwVerified, setIsPwVerified] = useState(false);
-    const [errMessage, setErrMessage] = useState("");
-    const [registerStep, setRgisterStep] = useState(1);
-    const { currentUser, setCurrentUser } = useContext(userContext);
-    const navigate = useNavigate();
-    const user = {
-        "id": 0,
-        "name": "",
-        "username": "",
-        "email": "",
-        "address": {
-            "street": "",
-            "suite": "",
-            "city": "",
-            "zipcode": "",
-            "geo": {
-                "lat": "",
-                "lng": ""
-            }
-        },
-        "phone": "",
-        "website": "",
-        "company": {
-            "name": "",
-            "catchPhrase": "",
-            "bs": ""
-        }
-    }
+  const [password, setPassword] = useState("");
+  const [verifyPassword, setVerifyPassword] = useState("");
+  const [passwords, setPasswords] = useState({ password: "", verifyPassword: "" });
+  const [isPasswordVerified, setIsPasswordVerified] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [registerStep, setRegisterStep] = useState(1);
+  const { currentUser, setCurrentUser } = useContext(userContext);
+  const navigate = useNavigate();
+  const user = {
+    id: 0,
+    name: "",
+    username: "",
+    email: "",
+    address: {
+      street: "",
+      suite: "",
+      city: "",
+      zipcode: "",
+      geo: {
+        lat: "",
+        lng: "",
+      },
+    },
+    phone: "",
+    website: "",
+    company: {
+      name: "",
+      catchPhrase: "",
+      bs: "",
+    },
+  };
 
-    function handlePwVerifyChange(event) {
-        event.preventDefault();
-        setIsPwVerified(password === event.target.value);
-    }
+  const handlePasswordVerifyChange = (event) => {
+    event.preventDefault();
+    setIsPasswordVerified(password === event.target.value);
+  };
 
-    const handlePasswordChange = (event) => {
-        event.preventDefault();
-        setPassword(event.target.value)
-    }
+  const handlePasswordChange = (event) => {
+    event.preventDefault();
+    setPassword(event.target.value);
+  };
 
-    function handleNextBtn(event) {
-        event.preventDefault();
-        setErrMessage("");
-        fetch(`http://localhost:3000/users?username=${event.target.username.value}`)
-            .then(result => result.json())
-            .then(json => json.length ? setErrMessage("This username already exists") : requestMoreDetails(event))
-            .catch(error => setErrMessage("ERROR try agian"))
-    }
+  const handleNextBtn = (event) => {
+    event.preventDefault();
+    setErrorMessage("");
+    fetch(`http://localhost:3000/users?username=${event.target.username.value}`)
+      .then((result) => result.json())
+      .then((json) =>
+        json.length ? setErrorMessage("This username already exists") : requestMoreDetails(event)
+      )
+      .catch((error) => setErrorMessage("ERROR try again"));
+  };
 
-    function requestMoreDetails(event) {
-        user.username = event.target.username.value;
-        user.website = event.target.password.value;
-        setRgisterStep(2);
-    }
+  const requestMoreDetails = (event) => {
+    user.username = event.target.username.value;
+    user.website = event.target.password.value;
+    setRegisterStep(2);
+  };
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        setErrMessage("");
-        user.id = await getNextId() ?? alert("sorry, try later");
-        user.name = event.target.name.value;
-        user.email = event.target.email.value;
-        user.address.street = event.target.street.value;
-        user.address.suite = event.target.suite.value;
-        user.address.city = event.target.city.value;
-        user.address.zipcode = event.target.zipcode.value;
-        user.address.geo.lat = event.target.lat.value;
-        user.address.geo.lng = event.target.lng.value;
-        user.address.phone = event.target.phone.value;
-        user.company.name = event.target.companyName.value;
-        user.company.catchPhrase = event.target.catchPhrase.value;
-        user.company.bs = event.target.bs.value;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setErrorMessage("");
+    user.id = (await getNextId()) ?? alert("Sorry, try later");
+    user.name = event.target.name.value;
+    user.email = event.target.email.value;
+    user.address.street = event.target.street.value;
+    user.address.suite = event.target.suite.value;
+    user.address.city = event.target.city.value;
+    user.address.zipcode = event.target.zipcode.value;
+    user.address.geo.lat = event.target.lat.value;
+    user.address.geo.lng = event.target.lng.value;
+    user.address.phone = event.target.phone.value;
+    user.company.name = event.target.companyName.value;
+    user.company.catchPhrase = event.target.catchPhrase.value;
+    user.company.bs = event.target.bs.value;
         fetch("http://localhost:3000/users", {
             method: 'POST',
             body: JSON.stringify(user),
@@ -103,23 +105,23 @@ const Register = () => {
             })
     }
 
-    async function getNextId() {
+    const getNextId = async () => {
         const id = await fetch("http://localhost:3000/config/1")
-            .then(result => result.json())
-            .then(json => json.userId)
-            .catch(error => console.error(error));
+          .then((result) => result.json())
+          .then((json) => json.userId)
+          .catch((error) => console.error(error));
         return id.toString();
-    }
-
-    useEffect(() => {
-        setIsPwVerified(!PW.password == "" && PW.password === PW.verifyPW);
-    }, [PW.password, PW.verifyPW])
-
-    return (
+      };
+    
+      useEffect(() => {
+        setIsPasswordVerified(!passwords.password === "" && passwords.password === passwords.verifyPassword);
+      }, [passwords.password, passwords.verifyPassword]);
+    
+      return (
         <>
-            <div className="signUp-wrapper">
-                <h1>Please sign up</h1>
-                <form onSubmit={(event) => handleNextBtn(event)}>
+          <div className="signUp-wrapper">
+            <h1>Please sign up</h1>
+            <form onSubmit={(event) => handleNextBtn(event)}>
                     <label htmlFor="username">Username</label>
                     <input disabled={registerStep != 1} name="username" type="text" required />
                     <label htmlFor="password">Password</label>
@@ -162,11 +164,11 @@ const Register = () => {
                     <div>
                         <button type="submit">submit</button>
                     </div>
-                </form>}
-            </div>
-            <p>{errMessage}</p>
-        </>
-    )
+                    </form>}
+      </div>
+      <p>{errorMessage}</p>
+    </>
+  );
+};
 
-}
-export default Register
+export default Register;
