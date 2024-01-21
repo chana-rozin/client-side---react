@@ -16,12 +16,12 @@ const Home = ()=>{
     
     return (
         <>
-            <h1>hi!</h1>
+            <h1>{currentUser.name}</h1>
             <nav>
                 <ul>
-                    {/* <Link to={`/users/${userId}/info`}>
+                    <Link to={`/users/${userId}/info`}>
                         <li>Info</li>
-                    </Link> */}
+                    </Link>
                     <Link to={`/users/${userId}/todos`}>
                         <li>Todos</li>
                     </Link>

@@ -6,7 +6,7 @@ import Todos from './Components/Todos/Todos'
 import Albums from './Components/Albums/Albums'
 import Posts from './Components/Posts/Posts'
 import Comments from './Components/Comments/Comments'
-import PostDetails from './Components/Posts/PostDetails'
+import Info from './Components/Info/Info'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -28,6 +28,7 @@ function App() {
             <Route path='/home' element={currentUser != null ? <Home /> : <LogIn />} />
             <Route path='/register' element={<Register />} />
             <Route path='/users/:userId'>
+              <Route path='info' element={currentUser != null ? <Info/> : <LogIn />}></Route>
               <Route path='todos' element={currentUser != null ? <Todos /> : <LogIn />} />
               <Route path='albums' element={currentUser != null ? <Albums /> : <LogIn />} />
               <Route path='posts' element={currentUser != null ? <Posts /> : <LogIn />} >
