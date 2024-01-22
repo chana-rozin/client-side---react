@@ -1,3 +1,11 @@
-.title{
-    margin-left: 5px;
+
+.listContainer{
+    display: flex;
+    flex-wrap: wrap;
+
+}
+    
+
+.album{
+    width: 25%;
 }
