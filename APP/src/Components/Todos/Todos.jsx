@@ -9,6 +9,7 @@ import updateIcon from "../../Images/editIcon.svg";
 import Popup from 'reactjs-popup';
 import UpdateTodo from "./UpdateTodo";
 import style from "./Todos.module.css";
+import "../commonStyle/popupStyle.css"
 import { FiPlusCircle } from "react-icons/fi";
 const Todos = () => {
 
@@ -116,20 +117,20 @@ const Todos = () => {
                     <label htmlFor="searchByCompleted">Completed</label>
                     <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked ? true : "")}></input></label>
             </div>
-            
-           <div className={style.addPopup}><Popup  trigger=
-                    {<FiPlusCircle />}
-                    contentStyle={{width: "300px", justifySelf: "center", alignSelf: "center"}} position="center">
-                    {
-                        close => (
-                            <div className='modal'>
-                                <div className='content'>
-                                    <AddTodo setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} />
-                                </div>
-                            </div>
-                        )
-                    }
-                </Popup></div> 
+            <Popup trigger=
+                {<FiPlusCircle />}
+                position="center center"
+                closeOnDocumentClick>
+                
+                   { close => (
+                       <div className="popupContainer">
+                            
+                            <AddTodo setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} />
+                            
+                        </div>
+                    )}
+                
+            </Popup>
             <div>
                 {toShowTodosArr.map((todo, index) =>
 

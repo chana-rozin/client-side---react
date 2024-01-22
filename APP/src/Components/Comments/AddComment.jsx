@@ -76,26 +76,17 @@ const AddComment = (props) => {
 
     return (
         <>
-            <p>Add your comment:</p>
-            <div>
-                <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span>
-                        <input
-                            placeholder="Name"
-                            type="text"
-                            name="name"
-                            required
-                        ></input>
-                    </span>
-                    <span>
-                        <input
-                            placeholder="Your text here"
-                            type="text"
-                            name="body"
-                            required
-                        ></input>
-                    </span>
-                    <button type="submit">Add</button>
+            <div className="container">
+                <p>Add your comment:</p>
+                <form onSubmit={handleAddBtn}>
+                    <input
+                        placeholder="Name"
+                        type="text"
+                        name="name"
+                        required
+                    ></input>
+                    <textarea name="body" placeholder="Your text here" required></textarea>
+                    <input type="submit" value="Add"></input>
                 </form>
             </div>
         </>

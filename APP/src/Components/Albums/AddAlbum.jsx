@@ -75,11 +75,11 @@ const AddAlbum = (props) => {
 
     return (
         <>
+            <div className="container">
             <p>Add your album:</p>
-            <div>
-                <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input placeholder="Your album title:" type="text" name="title"></input></span>
-                    <button type="submit">Add</button>
+                <form onSubmit={handleAddBtn}>
+                <input placeholder="Your album title:" type="text" name="title"></input>
+                    <input type="submit" value="Add"></input>
                 </form>
             </div>
         </>

@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
 const AddPost = (props) => {
 
-    const { setAllData, closePopUp,setIsAdded} = props;
+    const { setAllData, closePopUp, setIsAdded } = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const AddPost = (props) => {
         "id": "0",
         "title": "",
         "body": ""
-      }
+    }
     async function handleAddBtn(event) {
         event.preventDefault();
         post.userId = userId;
@@ -35,7 +35,7 @@ const AddPost = (props) => {
             .then((response) => {
                 if (response.status === 201) {
                     increasePostId();
-                    setAllData(prevArr=>[...prevArr,post]);
+                    setAllData(prevArr => [...prevArr, post]);
                     setIsAdded(true);
                 }
                 else {
@@ -66,12 +66,12 @@ const AddPost = (props) => {
 
     return (
         <>
-            <p>add your post:</p>
-            <div>
-                <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input placeholder="your post title:" type="text" name="title"></input></span>
-                    <span><input placeholder="your post body:" type="text" name="body"></input></span>
-                    <button type="submit">add</button>
+            <div className="container">
+                <p>add your post:</p>
+                <form onSubmit={handleAddBtn}>
+                    <input placeholder="your post title:" type="text" name="title"></input>
+                    <textarea name="body" placeholder="your post body:"></textarea>
+                    <input type="submit" value="Add"></input>
                 </form>
             </div>
         </>
