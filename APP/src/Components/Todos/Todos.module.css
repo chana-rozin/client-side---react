@@ -1,11 +1,37 @@
-/* .addPopup{
-    justify-self: center;
-    position: fixed;
-}
 
 .todosWarpper{
     display: flex;
-    justify-self: center;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+.listContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     align-self: center;
-    position: fixed;
-} */
+}
+
+.todo{
+    margin: 10px;
+    display: flex;
+   
+}
+
+.todo input[type=checkbox]{
+    width:1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid black;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.todo input[type=checkbox]:checked{
+   background-color: lightgreen;
+   
+}

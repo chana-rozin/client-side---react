@@ -46,7 +46,7 @@
 }
 
 .addBtn{
-    margin-bottom: 30px;
+    margin: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
