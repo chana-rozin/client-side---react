@@ -112,10 +112,11 @@ const Albums = () => {
           
           <div className={style.listContainer}>{displayedAlbums.map(album => (
             <div key={album.id} className={style.album}>
-              <>
+              <><Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}>
                 <div><FcFolder size={200}/></div>
                 <span>{album.id}. </span> 
-                <Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}>{album.title}</Link>
+                {album.title}
+                </Link>
               </> 
             </div>
           ))}</div>

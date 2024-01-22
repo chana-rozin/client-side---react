@@ -50,7 +50,7 @@ const Photos = () => {
     return (
         <>
           <div className="popupContent"> <Popup trigger=
-                {<FiPlusCircle />}
+                { <div className="addBtn" >add photo to <b>{albumTitle}</b> album <FiPlusCircle /></div>}
                 position="center center"
                 closeOnDocumentClick>
                 
