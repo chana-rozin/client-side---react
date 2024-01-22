@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroller";
-// import './Albums.css'; // Import a separate CSS file for styling
+import style from "./Albums.module.css"
 import { userContext } from "../../App";
 import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
 import AddAlbum from './AddAlbum';
+import { FcFolder } from "react-icons/fc";
 
 const Albums = () => {
   const itemsPerPage = 20;
@@ -83,7 +84,7 @@ const Albums = () => {
         <label> Search by:
           <label htmlFor="searchById">ID</label>
           <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
-          <label htmlFor="searchByTitle">Title</label>
+          <label htmlFor="searchByTitle" className={style.title}>Title</label>
           <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
         </label>
       </div>
@@ -111,8 +112,9 @@ const Albums = () => {
           {displayedAlbums.map(album => (
             <div key={album.id} className="album">
               <>
-                <span>id: {album.id}</span> 
-                <Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}> title: {album.title}</Link>
+                <div><FcFolder/></div>
+                <span>{album.id}.</span> 
+                <Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}>{album.title}</Link>
               </> 
             </div>
           ))}

@@ -1,11 +1,6 @@
-/* .layoutLink {
+.layoutLink {
     font-weight: 500;
     color: rgb(174, 218, 248);
-   
-
-}
-
-.layoutLink:hover {
 }
 
 a {
@@ -18,10 +13,9 @@ a {
     width: 50%;
     margin-left: 20%;
     margin-bottom: 30px;
-    justify-content: space-around;
-
+    justify-content: space-between;
+    align-self: center;
 }
 .c:hover{
     color: rgb(50, 52, 168);
-
-} */
+}

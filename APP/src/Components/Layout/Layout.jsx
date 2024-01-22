@@ -18,6 +18,7 @@ const Layout = ()=>{
     return (
         <>
             <h1>{currentUser.name}</h1>
+            <div className={style.links}>
             <nav className={style.c}>
                     <Link to={`/users/${userId}/info`} >
                         <dt>Info</dt>
@@ -35,6 +36,7 @@ const Layout = ()=>{
                         <dt>Logout</dt>
                    </a>
             </nav>
+            </div>
             <Outlet/>
         </>
     )
