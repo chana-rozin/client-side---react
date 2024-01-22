@@ -26,6 +26,18 @@
     margin: 5px;
 }
 
+.container input[type=checkbox]{
+    width: 15%;
+   margin: 0;
+}
+
+.container textarea{
+    width: 90%;
+    height: 90px;
+    margin: 5px;
+}
+
+
 .container{
     display: flex;
     align-items: center;

@@ -76,22 +76,19 @@ const AddTodo = (props) => {
 
     return (
         <>
-            <p>add your todo:</p>
-            <div>
-                <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span>
-                        <input type="checkbox" name="completed" />
-                    </span>
-                    <span>
-                        <input
-                            placeholder="your todo title:"
-                            type="text"
-                            name="title"
-                            value={todo.title}
-                            onChange={(e) => setTodo({ ...todo, title: e.target.value })}
-                        />
-                    </span>
-                    <button type="submit">add</button>
+            <div className="container">
+                <p>add your todo:</p>
+                <form onSubmit={handleAddBtn}>
+                    <input type="checkbox" name="completed" />
+                    <lable htmlfor="completed">completed</lable>
+                    <input
+                        placeholder="your todo title:"
+                        type="text"
+                        name="title"
+                        value={todo.title}
+                        onChange={(e) => setTodo({ ...todo, title: e.target.value })}
+                    />
+                    <input type="submit" value="Add"></input>
                 </form>
             </div>
         </>

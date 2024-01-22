@@ -86,6 +86,20 @@ const Albums = () => {
           <label htmlFor="searchByTitle">Title</label>
           <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
         </label>
+        <Popup trigger=
+                {<FiPlusCircle />}
+                position="center center"
+                closeOnDocumentClick>
+                
+                   { close => (
+                       <div className="popupContainer">
+                            
+                            <AddAlbum setIsAdded={setIsAdded} setMyAlbums={setMyAlbums} closePopUp={close} />
+                            
+                        </div>
+                    )}
+                
+            </Popup>
       </div>
       <div>
         <InfiniteScroll
@@ -94,20 +108,7 @@ const Albums = () => {
           hasMore={hasMore}
           loader={<h4 className="loader">Loading...</h4>}
           useWindow={false}>
-          <Popup trigger=
-            {<FiPlusCircle />}
-            position="down">
-            {
-              close => (
-                <div className='modal'>
-                  <div className='content'>
-                    <AddAlbum setIsAdded={setIsAdded} setMyAlbums={setMyAlbums} closePopUp={close} />
-                  </div>
-                </div>
-              )
-            }
-          </Popup>
-
+          
           {displayedAlbums.map(album => (
             <div key={album.id} className="album">
               <>
