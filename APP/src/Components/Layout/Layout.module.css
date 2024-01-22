@@ -32,7 +32,5 @@ header{
 position: absolute;
 top: 200px;
 left: 0;
-display: flex;
-justify-content: center;
-flex-direction: column;
+width: 100%;
 }

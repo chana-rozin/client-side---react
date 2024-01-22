@@ -88,7 +88,7 @@ const Albums = () => {
           <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
         </label>
         <Popup trigger=
-                {<FiPlusCircle />}
+                {<div className="addBtn" >create new album<FiPlusCircle /></div>}
                 position="center center"
                 closeOnDocumentClick>
                 

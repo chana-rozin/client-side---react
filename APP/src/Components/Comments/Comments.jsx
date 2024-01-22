@@ -43,7 +43,7 @@ const Comments = () => {
         <>
             <div>
                 <Popup trigger=
-                    {<FiPlusCircle />}
+                    {<div className="addBtn" >add comment<FiPlusCircle /></div>}
                     position="center center"
                     closeOnDocumentClick>
 

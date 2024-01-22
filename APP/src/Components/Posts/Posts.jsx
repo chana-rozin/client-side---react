@@ -105,7 +105,7 @@ const Posts = () => {
                 <button onClick={() => { setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts") }} >press to view all posts</button>
                 : <button onClick={() => { setFiltersArr(updateOrAddFilter("userId", userId)); setDisplayMode("myPosts") }} >press to view only my posts</button>}
             <Popup trigger=
-                {<FiPlusCircle />}
+                {<div className="addBtn" >create new post<FiPlusCircle /></div>}
                 position="center center"
                 closeOnDocumentClick>
 

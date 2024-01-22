@@ -131,13 +131,13 @@ const Todos = () => {
                     )}
                 
             </Popup>
-            <div>
+            <div className={style.listContainer}>
                 {toShowTodosArr.map((todo, index) =>
 
-                (<div key={index} props={inEditing}>
+                (<div key={index} className={style.todo}>
                     {index != inEditing ? <>
-                        <span><input readOnly type="checkbox" name="completed" checked={todo.completed} /></span>
-                        <span>id: {index + 1} </span>
+                        <input readOnly type="checkbox" name="completed" checked={todo.completed} />
+                        <span>{todo.id}. </span>
                         <span> {todo.title}</span>
                         <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
                         <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></> :
