@@ -1,12 +1,12 @@
-/* .photoContainer{
+
+.listContainer{
     display: flex;
-    background-color: red;
     flex-wrap: wrap;
-} */
 
-/* .photo{
-    width:auto;
-} */
+}
+    
 
-
+.photo{
+    width: 25%;
+}
 

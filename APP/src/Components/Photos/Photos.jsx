@@ -70,17 +70,17 @@ const Photos = () => {
                 hasMore={hasMore}
                 loader={<p>Loading...</p>}
                 endMessage={<p>No more data to load.</p>}>
-                {photosArr.map(photo =>
-                    <span key={photo.id}>
+               <div className={style.listContainer}> {photosArr.map(photo =>
+                    <span className={style.photo} key={photo.id}>
                         {inEditing != photo.id ? <>
-                            <div ><b>{photo.title}</b></div>
                             <img src={photo.thumbnailUrl}></img>
+                            <div ><b>{photo.title}</b></div>
                             <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(photo.id)}><MdOutlineEdit /></span>
                         </>
                             : <UpdatePhoto photo={photo} setInEditing={setInEditing} setPhotosArr={setPhotosArr} />}
                     </span>
-                )}
+                )}</div>
 
             </InfiniteScroll>
         </>
