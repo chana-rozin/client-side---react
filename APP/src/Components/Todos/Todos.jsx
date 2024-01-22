@@ -149,8 +149,5 @@ const Todos = () => {
         </>)
 }
 
-export default Todos
-
-
-
+export default Todos;
             //npm i reactjs-popup
