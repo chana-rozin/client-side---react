@@ -110,15 +110,15 @@ const Albums = () => {
           loader={<h4 className="loader">Loading...</h4>}
           useWindow={false}>
           
-          {displayedAlbums.map(album => (
-            <div key={album.id} className="album">
+          <div className={style.listContainer}>{displayedAlbums.map(album => (
+            <div key={album.id} className={style.album}>
               <>
-                <div><FcFolder/></div>
-                <span>{album.id}.</span> 
+                <div><FcFolder size={200}/></div>
+                <span>{album.id}. </span> 
                 <Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}>{album.title}</Link>
               </> 
             </div>
-          ))}
+          ))}</div>
         </InfiniteScroll>
       </div>
     </>
