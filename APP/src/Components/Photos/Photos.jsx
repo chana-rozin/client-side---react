@@ -8,6 +8,7 @@ import { useState, useContext, useEffect } from "react";
 import { userContext } from "../../App";
 import Popup from 'reactjs-popup';
 import InfiniteScroll from "react-infinite-scroll-component";
+import style from"./Photos.module.css"
 
 const Photos = () => {
     const location = useLocation()
@@ -23,7 +24,7 @@ const Photos = () => {
         try {
             const response = await fetch(`http://localhost:3000/photos?albumId=${albumId}&_start=${start}&_limit=${photosPerFetch}`);
             const data = await response.json();
-            setPhotosArr(prevPhotosArr => [...prevPhotosArr, ...data]);
+            setPhotosArr(prevPhotosArr => prevPhotosArr.concat(data));
             setHasMorePhotos(data.length === 12);
             setStart(prevStart => prevStart + photosPerFetch);
         } catch (error) {
@@ -74,7 +75,7 @@ const Photos = () => {
                     </span>
                 )}
             </div>
-            <InfiniteScroll
+          <InfiniteScroll 
                 dataLength={hasMorePhotos ? photosArr.length - 2 : photosArr.length}
                 next={fetchPhotos}
                 hasMore={hasMorePhotos}
@@ -88,7 +89,7 @@ const Photos = () => {
                                 <img src={photo.thumbnailUrl} alt={photo.title}></img>
                                 <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
                                 <span onClick={() => setInEditingPhotoId(photo.id)}><MdOutlineEdit /></span>
-                            </>
+                          </>
                         ) : (
                             <UpdatePhoto photo={photo} setInEditing={setInEditingPhotoId} setPhotosArr={setPhotosArr} />
                         )}

@@ -29,15 +29,15 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route element={<Layout />}>
-            <Route path='/home' element={currentUser != null ? <Home /> : <Login />} />
+            <Route path='/home' element={<Home /> } />
               <Route path='/users/:userId'>
-                <Route path='info' element={currentUser != null ? <Info /> : <Login />}></Route>
-                <Route path='todos' element={currentUser != null ? <Todos /> : <Login />} />
+                <Route path='info' element={ <Info />}></Route>
+                <Route path='todos' element={<Todos />} />
                 <Route path='albums'>
-                  <Route index element={currentUser != null ? <Albums /> : <Login />} />
+                  <Route index element={<Albums /> } />
                   <Route path=':albumId/photos' element={<Photos />} />
                 </Route>
-                <Route path='posts' element={currentUser != null ? <Posts /> : <Login />} >
+                <Route path='posts' element={<Posts />} >
                   <Route path=':postId/comments' element={<Comments />} />
                 </Route>
               </Route>

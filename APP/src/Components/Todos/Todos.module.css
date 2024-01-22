@@ -1,0 +1,11 @@
+.addPopup{
+    justify-self: center;
+    position: fixed;
+}
+
+.todosWarpper{
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    position: fixed;
+}

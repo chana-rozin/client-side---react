@@ -8,6 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import updateIcon from "../../Images/editIcon.svg";
 import Popup from 'reactjs-popup';
 import UpdateTodo from "./UpdateTodo";
+import style from "./Todos.module.css";
 import { FiPlusCircle } from "react-icons/fi";
 const Todos = () => {
 
@@ -105,7 +106,7 @@ const Todos = () => {
 
     return (
         <>
-            <div>
+            <div className={style.todosWarpper}><div>
                 <Select options={options} name="sortBy" placeholder="sort by" onChange={(e) => setSortBy(e.value)} />
                 <label> serach by:
                     <label htmlFor="searchById">ID</label>
@@ -115,9 +116,9 @@ const Todos = () => {
                     <label htmlFor="searchByCompleted">Completed</label>
                     <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked ? true : "")}></input></label>
             </div>
-            <Popup trigger=
+           <div className={style.addPopup}><Popup  trigger=
                     {<FiPlusCircle />}
-                    position="down">
+                    contentStyle={{width: "300px", justifySelf: "center", alignSelf: "center"}} position="center">
                     {
                         close => (
                             <div className='modal'>
@@ -127,7 +128,7 @@ const Todos = () => {
                             </div>
                         )
                     }
-                </Popup>
+                </Popup></div> 
             <div>
                 {toShowTodosArr.map((todo, index) =>
 
@@ -145,7 +146,7 @@ const Todos = () => {
 
                 ))}
                 <Outlet />
-            </div>
+            </div></div>
         </>)
 }
 
