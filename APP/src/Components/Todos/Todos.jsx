@@ -118,7 +118,7 @@ const Todos = () => {
                     <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked ? true : "")}></input></label>
             </div>
             <Popup trigger=
-                {<FiPlusCircle />}
+                {<div className="addBtn" >new todo<FiPlusCircle /></div>}
                 position="center center"
                 closeOnDocumentClick>
                 
