@@ -7,7 +7,7 @@ const Info = ()=>{
 
     return (<>
          <div className={style.details}>
-            <h4>{currentUser.name}' details:</h4>
+            <h3>your profile:</h3>
             <p>id: {currentUser.id}</p>
             <p>name: {currentUser.name}</p>
             <p>username: {currentUser.username}</p>

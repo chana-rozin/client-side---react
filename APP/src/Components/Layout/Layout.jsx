@@ -17,7 +17,7 @@ const Layout = () => {
 
     return (
         <><header>
-            <h1>{currentUser.name}</h1>
+            <h1>Hi {currentUser.name}</h1>
             <nav className={style.links}>
                 <Link to={`/users/${userId}/info`} >
                     <dt>Info</dt>
@@ -34,25 +34,6 @@ const Layout = () => {
                 <a onClick={() => handleLogout()} >
                     <dt>Logout</dt>
                 </a>
-        <>
-            <h1>Hi {currentUser.name}</h1>
-            <div className={style.links}>
-            <nav className={style.c}>
-                    <Link to={`/users/${userId}/info`} >
-                        <dt>Info</dt>
-                    </Link>
-                    <Link to={`/users/${userId}/todos`} >
-                        <dt>Todos</dt>
-                    </Link>
-                    <Link to={`/users/${userId}/posts`} >
-                        <dt>Posts</dt>
-                    </Link>
-                    <Link to={`/users/${userId}/albums`} >
-                        <dt>Albums</dt>
-                    </Link>
-                    <a onClick={()=>handleLogout()} >
-                        <dt>Logout</dt>
-                   </a>
             </nav>
         </header>
             <div className={style.content}><Outlet /></div>
