@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
+import "../commonStyle/popupStyle.css"
 
 const AddPhoto = (props) => {
     const { albumId, setPhotosArr, closePopUp } = props;
@@ -70,13 +71,14 @@ const AddPhoto = (props) => {
 
     return (
         <>
-            <p>Add your photo:</p>
-            <div>
-                <form onSubmit={(event) => handleAddBtn(event)}>
-                    <span><input placeholder="Title" type="text" name="title" /></span>
-                    <span><input placeholder="Photo URL" type="url" name="url" required /></span>
-                    <span><input placeholder="Thumbnail URL" type="url" name="thumbnailUrl" required /></span>
-                    <button type="submit">Add</button>
+            
+            <div className="container">
+                <p>Add your photo:</p>
+                <form onSubmit={handleAddBtn}>
+                    <input placeholder="Title" type="text" name="title" />
+                    <input placeholder="Photo URL" type="url" name="url" required />
+                    <input placeholder="Thumbnail URL" type="url" name="thumbnailUrl" required />
+                    <input type="submit" value="Add"></input>
                 </form>
             </div>
         </>
