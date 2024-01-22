@@ -125,11 +125,11 @@ const Register = () => {
                     <label htmlFor="username">Username</label>
                     <input disabled={registerStep != 1} name="username" type="text" required />
                     <label htmlFor="password">Password</label>
-                    <input disabled={registerStep != 1} onChange={(e) => setPW(prev => ({ ...prev, password: e.target.value }))} name="password" type="password" />
+                    <input disabled={registerStep != 1} onChange={(e) => setPassword(prev => ({ ...prev, password: e.target.value }))} name="password" type="password" />
                     <label htmlFor="verifyPassword">Verify Password</label>
-                    <input disabled={registerStep != 1} onChange={(e) => setPW(prev => ({ ...prev, verifyPW: e.target.value }))} name="verifyPassword" type="password" />
+                    <input disabled={registerStep != 1} onChange={(e) => setPassword(prev => ({ ...prev, verifyPW: e.target.value }))} name="verifyPassword" type="password" />
                     {registerStep === 1 && <div>
-                        <button disabled={!isPwVerified} type="submit">Next</button>
+                        <button disabled={!isPasswordVerified} type="submit">Next</button>
                     </div>}
                 </form>
 

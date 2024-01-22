@@ -66,17 +66,19 @@ const Posts = () => {
     setDisplayedData(filteredPostsArr);
   }
 
-  function handleFilter(filterKey, inputValue) {
-    const updateFilters = inputValue === ""
+  
+  function handleFilter(filterKey, filterValue) {
+    const updateFilters = filterValue === ""
       ? removeFilter(filterKey)
-      : updateOrAddFilter(filterKey, inputValue);
-
+      : updateOrAddFilter(filterKey, filterValue);
     setFiltersArr(updateFilters);
   }
+
 
   function removeFilter(keyToRemove) {
     return filtersArr.filter(el => el.key !== keyToRemove);
   }
+
 
   function updateOrAddFilter(keyToUpdate, value) {
     if (filtersArr.some(el => el.key === keyToUpdate)) {
@@ -86,6 +88,7 @@ const Posts = () => {
       return [...filtersArr, { key: keyToUpdate, value }];
     }
   }
+
 
   return (
     <>

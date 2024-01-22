@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import ReactPaginate from 'react-paginate';
+import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroller";
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
 // import './Albums.css'; // Import a separate CSS file for styling
 import { userContext } from "../../App";
 import Popup from 'reactjs-popup';

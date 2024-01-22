@@ -1,6 +1,7 @@
 import { Link , Outlet, useNavigate, useParams} from "react-router-dom"
 import React, {useContext} from "react";
 import { userContext } from "../../App";
+import style from "./Layout.module.css";
 
 const Layout = ()=>{
 
@@ -17,24 +18,22 @@ const Layout = ()=>{
     return (
         <>
             <h1>{currentUser.name}</h1>
-            <nav>
-                <ul>
-                    <Link to={`/users/${userId}/info`}>
-                        <li>Info</li>
+            <nav className={style.c}>
+                    <Link to={`/users/${userId}/info`} >
+                        <dt>Info</dt>
                     </Link>
-                    <Link to={`/users/${userId}/todos`}>
-                        <li>Todos</li>
+                    <Link to={`/users/${userId}/todos`} >
+                        <dt>Todos</dt>
                     </Link>
-                    <Link to={`/users/${userId}/posts`}>
-                        <li>Posts</li>
+                    <Link to={`/users/${userId}/posts`} >
+                        <dt>Posts</dt>
                     </Link>
-                    <Link to={`/users/${userId}/albums`}>
-                        <li>Albums</li>
+                    <Link to={`/users/${userId}/albums`} >
+                        <dt>Albums</dt>
                     </Link>
-                    <a onClick={()=>handleLogout()}>
-                        <li>Logout</li>
+                    <a onClick={()=>handleLogout()} >
+                        <dt>Logout</dt>
                    </a>
-                </ul>
             </nav>
             <Outlet/>
         </>

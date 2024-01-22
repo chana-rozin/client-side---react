@@ -1,0 +1,29 @@
+.layoutLink {
+    font-weight: 500;
+    /* display: flex; */
+    /* position: fixed; */
+    color: rgb(174, 218, 248);
+   
+
+}
+
+.layoutLink:hover {
+}
+
+a {
+    text-decoration: inherit;
+}
+
+.c {
+    color: rgb(174, 218, 248);
+    display: flex;
+    width: 50%;
+    margin-left: 20%;
+    margin-bottom: 30px;
+    justify-content: space-around;
+
+}
+.c:hover{
+    color: rgb(50, 52, 168);
+
+}
