@@ -28,16 +28,17 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  /* background-image: url("../src/Images/backGround3.png");
+  background-image: url("../src/Images/backGround3.png");
   background-repeat: no-repeat;
-  background-size: cover; */
-  background: url("../src/Images/backGround3.png") center 0 repeat-y;
+  background-size: cover;
+  
+  /* background: url("../src/Images/backGround3.png") center 0 repeat-y;
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  height: 100%;
+  height: 100%; */
 }
 
 h1 {

@@ -69,7 +69,7 @@ const Photos = () => {
                 next={(fetchPhotos)}
                 hasMore={hasMore}
                 loader={<p>Loading...</p>}
-                endMessage={<p>No more data to load.</p>}>
+                endMessage={<p>That's all your photos.</p>}>
                <div className={style.listContainer}> {photosArr.map(photo =>
                     <span className={style.photo} key={photo.id}>
                         {inEditing != photo.id ? <>

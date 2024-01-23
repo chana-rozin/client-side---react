@@ -91,9 +91,9 @@ const Posts = () => {
 
     return (
         <>
-            <div>
+            <div className={style.contorl}>
                 <label> search by:
-                    <label htmlFor="searchById">ID</label>
+                    <label htmlFor="searchById"> ID</label>
                     <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
                     <label htmlFor="searchByTitle">Title</label>
                     <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>

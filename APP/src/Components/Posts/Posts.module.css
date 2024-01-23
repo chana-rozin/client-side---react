@@ -30,4 +30,18 @@
   }
   .closeBtn{
     padding-left: 30px;
+    color: blue;
   }
+  .contorl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.contorl input {
+  height: 35px;
+  border-radius: 0.3;
+  vertical-align: middle;
+  margin: 10px;
+}
