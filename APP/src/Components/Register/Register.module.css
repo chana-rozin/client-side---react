@@ -39,7 +39,7 @@
     border: 2px solid rgba(255, 255, 255, .2);
     border-radius: 40px;
     font-size: 16px;
-    color: #ffffff;
+    color: #1801d5;
     padding: 20px 45px 20px 20px;
     border-color: #b3b7f7;
     margin-top: 20px;
@@ -51,6 +51,11 @@
     color: #fff;
 }
 
+.inputBox label{
+    color: #0053ba;
+    font-size: 18px;
+    padding-top: 20px;
+}
 .wrapper button{
     width: 100%;
     height: 45px;
