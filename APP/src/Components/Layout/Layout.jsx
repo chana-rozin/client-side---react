@@ -19,6 +19,9 @@ const Layout = () => {
         <><header>
             <h1>Hi {currentUser.name}</h1>
             <nav className={style.links}>
+                <Link to={`/home`} >
+                    <dt>Home</dt>
+                </Link>
                 <Link to={`/users/${userId}/info`} >
                     <dt>Info</dt>
                 </Link>

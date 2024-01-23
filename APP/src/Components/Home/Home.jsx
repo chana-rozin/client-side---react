@@ -7,7 +7,7 @@ const Home = ()=>{
     
     return (
         <>
-            <h1>home</h1>
+            <h1>Welcome to the leading social network in the USA</h1>
         </>
     )
 }
