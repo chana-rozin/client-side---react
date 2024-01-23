@@ -1,8 +1,9 @@
 import React from "react";
+import { cacheContext } from "../../App";
 
 const UpdateTodo = (props) => {
-    const { todo, setInEditing, setTodosArr } = props;
-
+    const { todo, setInEditing, todosArr,setTodosArr } = props;
+    const {updateCacheFrequencies} = useContext(cacheContext);
     const handleTodoUpdate = async (event) => {
         event.preventDefault();
         const updatedTodo = {
@@ -22,7 +23,10 @@ const UpdateTodo = (props) => {
 
             if (response.ok) {
                 setInEditing(-1);
-                setTodosArr((prevArr) => prevArr.map((el) => (el.id === todo.id ? updatedTodo : el)));
+                const updateData=todosArr.map((el) => (el.id === todo.id ? updatedTodo : el));
+                setTodosArr(updateData);
+                localStorage.setItem("todos", JSON.stringify({user:currentUser.id,data:updateData}));
+                updateCacheFrequencies("todo")
             } else {
                 console.error("Failed to update todo");
             }

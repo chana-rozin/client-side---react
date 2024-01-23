@@ -11,6 +11,8 @@ import UpdatePost from './UpdatePost';
 import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
 import AddPost from './AddPost';
+import { cacheContext } from "../../App";
+
 
 const Posts = () => {
     const itemsPerPage = 20;
@@ -20,15 +22,15 @@ const Posts = () => {
     let { userId, postId } = useParams();
     const { currentUser, setCurrentUser } = useContext(userContext);
     userId = currentUser.id;
+    const {cacheGet, updateCacheFrequencies} = useContext(cacheContext);
     const [filtersArr, setFiltersArr] = useState([{ "key": "userId", "value": userId.toString() }]);
     const [selectedPostId, setSelectedPostId] = useState(postId ?? -1);
     const [displayedData, setDisplayedData] = useState([]);
-    const [allData, setAllData] = useState([]);
+    const [postsArr, setPostsArr] = useState([]);
     const [displayMode, setDisplayMode] = useState(localStorage.getItem("displayMode"));
     const [inEditing, setInEditing] = useState(-1);
+
     
-    if(selectedPostId!=-1)
-        postId??setSelectedPostId(-1);
     const loadMore = () => {
         if (records === displayedData.length) {
             setHasMore(false);
@@ -39,27 +41,28 @@ const Posts = () => {
         }
     };
 
-    
+    if(selectedPostId!=-1)
+    postId??setSelectedPostId(-1);
 
-    useEffect(() => filterAllPosts(), [allData, filtersArr]);
+    useEffect(() => filterAllPosts(), [postsArr, filtersArr]);
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/posts`);
-                const jsonData = await response.json();
-                setAllData(jsonData);
-    
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchPosts();
-        
+        const fetchPosts = async () => 
+                await fetch(`http://localhost:3000/posts`)
+                .then(response=>response.json())
+                .then(jsonData=>{
+                    setPostsArr(jsonData);
+                    localStorage.setItem("posts",JSON.stringify({user:userId,data:data}))
+                    updateCacheFrequencies("posts");
+                })
+            .catch( (error) =>console.error(error))
+        if(!postsArr.length)
+            fetchPosts();
+       
     }, []); // Call fetchPosts when the component mounts
 
     function filterAllPosts() {
-        const filteredPostsArr = allData.filter(post =>
+        const filteredPostsArr = postsArr.filter(post =>
             filtersArr.every(filter =>
                 post[filter.key]
                 === filter.value
@@ -105,6 +108,11 @@ function changeDisplayMode(){
     }
 }
 
+function viewPost(postId){
+    navigate(postId);
+    setSelectedPostId(postId);
+}
+
     return (
         <>
             <div className={style.contorl}>
@@ -126,7 +134,7 @@ function changeDisplayMode(){
                 {close => (
                     <div className="popupContainer">
 
-                        <AddPost setAllData={setAllData} closePopUp={close} />
+                        <AddPost postsArr={postsArr} setPostsArr={setPostsArr} closePopUp={close} />
 
                     </div>
                 )}
@@ -143,9 +151,9 @@ function changeDisplayMode(){
                             {selectedPostId !== post.id ? <>
                                 <span className={style.postDetails}>{post.id}. </span>
                                 <span className={style.postDetails}>{post.title}</span>
-                                <button className={style.openBtn}disabled={selectedPostId !== -1} onClick={() => setSelectedPostId(post.id)}><IoIosArrowBack /></button>
+                                <button className={style.openBtn}disabled={selectedPostId !== -1} onClick={() => viewPost(post.id)}><IoIosArrowBack /></button>
                             </>
-                                : <PostDetails post={post} setAllData={setAllData} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId} />}
+                                : <PostDetails post={post} postsArr={postsArr} setPostsArr={setPostsArr} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId} />}
                         </div>
                     ))}
                     </div>

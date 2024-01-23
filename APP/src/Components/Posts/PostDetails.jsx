@@ -10,20 +10,28 @@ import style from "./Posts.module.css"
 const PostDetails = (props) => {
     const navigate = useNavigate()
     const href = location.pathname;
-    const { post, setAllData, inEditing, setInEditing, setSelectedPostId } = props;
+    const { post, postsArr, setPostsArr, inEditing, setInEditing, setSelectedPostId } = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
 
     function deletePost(id) {
-        setAllData(prevArr => prevArr.filter(post => post.id != id));
+        setPostsArr(prevArr => prevArr.filter(post => post.id != id));
 
         fetch(`http://localhost:3000/posts/${id}`, {
             method: 'DELETE',
         })
-            .then(re => { if (href.endsWith("/comments"))
-            navigate(-1);
-        setSelectedPostId(-1);})
-        .catch(error=>console.error(error));
+            .then(response => {
+                if (response.ok) {
+                    if (href.endsWith("/comments"))
+                        navigate(-1);
+                    setSelectedPostId(-1);
+                    const updataData=postsArr.filter(post => post.id != id);
+                    localStorage.setItem("posts", JSON.stringify({user:currentUser.id,data:updataData}))
+                    updateCacheFrequencies("posts");
+                    setTodosArr(updataData);
+                }
+            })
+            .catch(error => console.error(error));
     }
 
     function closePost() {
@@ -41,15 +49,15 @@ const PostDetails = (props) => {
                 {post.id != inEditing ?
                     <>
                         <span className={style.postDetails}>{post.id}. </span>
-                        <span>{post.title}</span>
+                        <span className={style.postDetails}><b>{post.title}</b></span>
                         <IoIosArrowDown className={style.closeBtn} onClick={() => closePost()} />
                         <div className={style.postDetails}>{post.body}</div>
-                        <Link to={`${post.id}/comments`} state={{postId:post.id}} className={style.postDetails}>view comments</Link>
+                        <Link to={`${post.id}/comments`} state={{ postId: post.id }} className={style.postDetails}>view comments</Link>
                         {post.userId == userId && <>
                             <span onClick={() => deletePost(post.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(post.id)}><MdOutlineEdit /></span></>}
                     </>
-                    : <UpdatePost post={post} setInEditing={setInEditing} setAllData={setAllData} />}
+                    : <UpdatePost post={post} setInEditing={setInEditing} setPostsArr={setPostsArr} />}
                 <Outlet />
             </div>
         </>)

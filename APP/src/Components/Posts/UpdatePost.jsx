@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const UpdatePost = (props) => {
-  const { post, setInEditing, setAllData } = props;
+  const { post, setInEditing, setPostsArr } = props;
 
   async function handlePostUpdate(event) {
     event.preventDefault();
@@ -20,7 +20,7 @@ const UpdatePost = (props) => {
         if(response.ok)
         {
           setInEditing(-1);
-          setAllData(prevArr=>prevArr.map(el=>el.id===post.id?post:el));
+          setPostsArr(prevArr=>prevArr.map(el=>el.id===post.id?post:el));
         }
         else{
           console.error("failed to update post");

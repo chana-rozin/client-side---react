@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
 const AddPost = (props) => {
 
-    const { setAllData, closePopUp, setIsAdded } = props;
+    const { setPostsArr, closePopUp, setIsAdded } = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ const AddPost = (props) => {
             .then((response) => {
                 if (response.status === 201) {
                     increasePostId();
-                    setAllData(prevArr => [...prevArr, post]);
+                    setPostsArr(prevArr => [...prevArr, post]);
                 }
                 else {
                     setErrMessage("500 something get worng:( try latter.")

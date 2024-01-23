@@ -1,7 +1,7 @@
 import React from "react";
 
 const UpdatePhoto = (props) => {
-    const { photo, setInEditing, setPhotosArr } = props;
+    const { photo, setInEditing, photosArr, setPhotosArr } = props;
 
     async function handlePhotoUpdate(event) {
         event.preventDefault();
@@ -17,9 +17,11 @@ const UpdatePhoto = (props) => {
             });
 
             if (response.ok) {
-                const updatedPhoto = { ...photo, title: updatedTitle };
                 setInEditing(-1);
-                setPhotosArr(prevArr => prevArr.map(el => (el.id === photo.id ? updatedPhoto : el)));
+                const updateData=photosArr.map(el => (el.id === photo.id ? { ...photo, title: updatedTitle } : el));
+                setPhotosArr(updateData);
+                localStorage.setItem("photos", JSON.stringify({user:currentUser.id,data:updateData}));
+                updateCacheFrequencies("photos")
             } else {
                 console.error("Failed to update photo");
             }
@@ -30,6 +32,7 @@ const UpdatePhoto = (props) => {
 
     return (
         <>
+        <image src={photo.thumbnailUrl}></image>
             <form onSubmit={(e) => handlePhotoUpdate(e)}>
                 <input type="text" name="title" defaultValue={photo.title} />
                 <button type="submit">Update</button>

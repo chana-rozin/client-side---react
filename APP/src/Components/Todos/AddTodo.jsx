@@ -40,10 +40,14 @@ const AddTodo = (props) => {
                 },
             });
 
-            if (response.status === 201) {
+            if (response.ok) {
                 increaseTodoId();
-                setTodosArr((prevArr) => [...prevArr, newTodo]);
+                let updateData;
+                setTodosArr((prevArr) => {updateData=[...prevArr, newTodo];
+                return updateData;});
                 setIsAdded(true);
+                    localStorage.setItem("todos", JSON.stringify({user:currentUser.id,data:updateData}))
+                    updateCacheFrequencies("todos");
             } else {
                 console.error("Failed to add todo");
             }
