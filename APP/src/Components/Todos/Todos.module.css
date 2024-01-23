@@ -6,6 +6,25 @@
     
 }
 
+.contorl{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contorl input{
+    height: 35px;
+border-radius: 0.3;
+vertical-align: middle;
+margin: 10px;
+}
+
+.filter{
+    height: 35px;
+border-radius: 0.3;
+margin: 10px;
+}
+
 .listContainer{
     display: flex;
     flex-direction: column;
@@ -13,10 +32,14 @@
     align-self: center;
 }
 
+.filter{
+    width: 300px;
+}
+
 .todo{
     margin: 10px;
     display: flex;
-   
+    width: 100%;
 }
 
 .todo input[type=checkbox]{
@@ -32,6 +55,6 @@
 }
 
 .todo input[type=checkbox]:checked{
-   background-color: lightgreen;
-   
+    appearance: auto;
+    clip-path: circle(50% at 50% 50%);
 }

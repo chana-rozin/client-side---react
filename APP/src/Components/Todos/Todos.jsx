@@ -4,7 +4,7 @@ import AddTodo from "./AddTodo";
 import Select from 'react-select'
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { RiDeleteBin7Fill } from "react-icons/ri";
-import { MdOutlineEdit } from "react-icons/md";
+import { MdOutlineEdit, MdWidthNormal } from "react-icons/md";
 import updateIcon from "../../Images/editIcon.svg";
 import Popup from 'reactjs-popup';
 import UpdateTodo from "./UpdateTodo";
@@ -107,50 +107,51 @@ const Todos = () => {
 
     return (
         <>
-            <div className={style.todosWarpper}><div>
-                <Select options={options} name="sortBy" placeholder="sort by" onChange={(e) => setSortBy(e.value)} />
-                <label> serach by:
-                    <label htmlFor="searchById">ID</label>
-                    <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilterBy("id", e.target.value)}></input>
-                    <label htmlFor="searchByTitle">Title</label>
-                    <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilterBy("title", e.target.value)}></input>
-                    <label htmlFor="searchByCompleted">Completed</label>
-                    <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked ? true : "")}></input></label>
-            </div>
-            <Popup trigger=
-                {<div className="addBtn" >new todo<FiPlusCircle /></div>}
-                position="center center"
-                closeOnDocumentClick>
-                
-                   { close => (
-                       <div className="popupContainer">
-                            
+            <div className={style.todosWarpper}>
+                <div className={style.contorl}>
+                    <label> <b>  serach by: </b>
+                        <label htmlFor="searchById">ID</label>
+                        <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilterBy("id", e.target.value)}></input>
+                        <label htmlFor="searchByTitle">Title</label>
+                        <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilterBy("title", e.target.value)}></input>
+                        <label htmlFor="searchByCompleted">Completed</label>
+                        <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked ? true : "")}></input></label>
+                        <Select className={style.filter} options={options} name="sortBy" placeholder="sort by" onChange={(e) => setSortBy(e.value) } />
+                </div>
+                <Popup trigger=
+                    {<div className="addBtn" >new todo<FiPlusCircle /></div>}
+                    position="center center"
+                    closeOnDocumentClick>
+
+                    {close => (
+                        <div className="popupContainer">
+
                             <AddTodo setIsAdded={setIsAdded} setTodosArr={setTodosArr} closePopUp={close} />
-                            
+
                         </div>
                     )}
-                
-            </Popup>
-            <div className={style.listContainer}>
-                {toShowTodosArr.map((todo, index) =>
 
-                (<div key={index} className={style.todo}>
-                    {index != inEditing ? <>
-                        <input readOnly type="checkbox" name="completed" checked={todo.completed} />
-                        <span>{todo.id}. </span>
-                        <span> {todo.title}</span>
-                        <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
-                        <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></> :
+                </Popup>
+                <div className={style.listContainer}>
+                    {toShowTodosArr.map((todo, index) =>
 
-                        <UpdateTodo todo={todo} setInEditing={setInEditing} setTodosArr={setTodosArr} />}
+                    (<div key={index} className={style.todo}>
+                        {index != inEditing ? <>
+                            <input readOnly type="checkbox" name="completed" checked={todo.completed} />
+                            <span>{todo.id}.</span>
+                            <span> {todo.title} </span>
+                            <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
+                            <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></> :
 
-                </div>
+                            <UpdateTodo todo={todo} setInEditing={setInEditing} setTodosArr={setTodosArr} />}
 
-                ))}
-                <Outlet />
-            </div></div>
+                    </div>
+
+                    ))}
+                    <Outlet />
+                </div></div>
         </>)
 }
 
 export default Todos;
-            //npm i reactjs-popup
+//npm i reactjs-popup
