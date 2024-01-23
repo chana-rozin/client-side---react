@@ -1,0 +1,33 @@
+  .post{
+    border:1px solid rgb(150, 185, 225);
+    margin-top: 10px;
+    margin-left: 11%;
+    margin-right: 35%;
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .openBtn{
+    background:none;
+    border: 0;
+  }
+
+  .listContainer{
+    margin-left: 20%;
+  }
+  .ViewAllOrMineBtn{
+    margin-top: 3%;
+  }
+
+  .ViewAllOrMineBtn:hover{
+    background-color: rgb(176 183 228);
+  }
+
+  .postDetails{
+    margin-left: 8px;
+    font-family:cursive;
+  }
+  .closeBtn{
+    padding-left: 30px;
+  }

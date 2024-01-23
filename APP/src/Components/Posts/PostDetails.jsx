@@ -5,6 +5,7 @@ import { RiDeleteBin7Fill } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import UpdatePost from "./UpdatePost";
+import style from "./Posts.module.css"
 
 const PostDetails = (props) => {
     const navigate = useNavigate()
@@ -38,11 +39,11 @@ const PostDetails = (props) => {
             <div>
                 {post.id != inEditing ?
                     <>
-                        <span>id: {post.id} </span>
+                        <span className={style.postDetails}>{post.id}. </span>
                         <span>{post.title}</span>
-                        <IoIosArrowDown onClick={() => closePost()} />
-                        <div>{post.body}</div>
-                        <Link to={`${post.id}/comments`} state={{postId:post.id}}>view comments</Link>
+                        <IoIosArrowDown className={style.closeBtn} onClick={() => closePost()} />
+                        <div className={style.postDetails}>{post.body}</div>
+                        <Link to={`${post.id}/comments`} state={{postId:post.id}} className={style.postDetails}>view comments</Link>
                         {post.userId == userId && <>
                             <span onClick={() => deletePost(post.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(post.id)}><MdOutlineEdit /></span></>}

@@ -5,10 +5,8 @@ import InfiniteScroll from "react-infinite-scroller";
 import { IoIosArrowBack } from "react-icons/io";
 import PostDetails from "./PostDetails"
 import "../commonStyle/popupStyle.css"
-
-import './Posts.css'; // Import a separate CSS file for styling
+import style from "./Posts.module.css"
 import { userContext } from "../../App";
-
 import UpdatePost from './UpdatePost';
 import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
@@ -102,8 +100,8 @@ const Posts = () => {
                 </label>
             </div>
             {displayMode === "myPosts" ?
-                <button onClick={() => { setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts") }} >press to view all posts</button>
-                : <button onClick={() => { setFiltersArr(updateOrAddFilter("userId", userId)); setDisplayMode("myPosts") }} >press to view only my posts</button>}
+                <button className={style.ViewAllOrMineBtn} onClick={() => { setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts") }} >press to view all posts</button>
+                : <button className={style.ViewAllOrMineBtn} onClick={() => { setFiltersArr(updateOrAddFilter("userId", userId)); setDisplayMode("myPosts") }} >press to view only my posts</button>}
             <Popup trigger=
                 {<div className="addBtn" >create new post<FiPlusCircle /></div>}
                 position="center center"
@@ -122,19 +120,18 @@ const Posts = () => {
                 <InfiniteScroll
                     pageStart={0}
                     loadMore={loadMore}
-                    hasMore={hasMore}
-                    loader={<h4 className="loader">Loading...</h4>}
                     useWindow={false}>
-                    {displayedData.map(post => (
-                        <div key={post.id} className="post">
+                    <div className={style.listContainer}>{displayedData.map(post => (
+                        <div key={post.id} className={style.post}>
                             {selectedPostId !== post.id ? <>
-                                <span>id: {post.id}</span>
-                                <span>{post.title}</span>
-                                <button disabled={selectedPostId !== -1} onClick={() => setSelectedPostId(post.id)}><IoIosArrowBack /></button>
+                                <span className={style.postDetails}>{post.id}. </span>
+                                <span className={style.postDetails}>{post.title}</span>
+                                <button className={style.openBtn}disabled={selectedPostId !== -1} onClick={() => setSelectedPostId(post.id)}><IoIosArrowBack /></button>
                             </>
                                 : <PostDetails post={post} setAllData={setAllData} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId} />}
                         </div>
                     ))}
+                    </div>
 
                 </InfiniteScroll>
             </div>

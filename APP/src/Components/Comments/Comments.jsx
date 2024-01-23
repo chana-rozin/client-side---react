@@ -8,7 +8,7 @@ import { FiPlusCircle } from "react-icons/fi";
 import AddComment from "./AddComment";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-
+import style from "./Comments.module.css"
 const Comments = () => {
     const location = useLocation();
     const { postId } = location.state;
@@ -58,7 +58,7 @@ const Comments = () => {
             </div>
             <div>
                 {commentsData.map((comment) => (
-                    <div key={comment.id}>
+                    <div key={comment.id} className={style.commentDetails}>
                         {inEditingCommentId !== comment.id ? (
                             <>
                                 <div>
