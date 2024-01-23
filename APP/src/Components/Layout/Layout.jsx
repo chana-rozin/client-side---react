@@ -7,7 +7,8 @@ const Layout = () => {
 
     const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useContext(userContext);
-    const userId = currentUser.id;
+    const userId = currentUser.id;;
+    
     function handleLogout() {
         localStorage.removeItem("currentUser");
         navigate("/login");
@@ -28,7 +29,7 @@ const Layout = () => {
                 <Link to={`/users/${userId}/todos`} >
                     <dt>Todos</dt>
                 </Link>
-                <Link to={`/users/${userId}/posts`} >
+                <Link to={`/users/${userId}/posts`} onClick={localStorage.setItem("displayMode", "personalPosts")}>
                     <dt>Posts</dt>
                 </Link>
                 <Link to={`/users/${userId}/albums`} >

@@ -30,6 +30,7 @@ const PostDetails = (props) => {
         const href = location.href
         if (href.endsWith("/comments"))
             navigate(-1);
+        navigate(-1);
         setSelectedPostId(-1);
 
     }

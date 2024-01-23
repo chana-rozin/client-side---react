@@ -36,7 +36,6 @@ const AddPost = (props) => {
                 if (response.status === 201) {
                     increasePostId();
                     setAllData(prevArr => [...prevArr, post]);
-                    setIsAdded(true);
                 }
                 else {
                     setErrMessage("500 something get worng:( try latter.")

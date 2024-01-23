@@ -24,10 +24,11 @@ const Posts = () => {
     const [selectedPostId, setSelectedPostId] = useState(postId ?? -1);
     const [displayedData, setDisplayedData] = useState([]);
     const [allData, setAllData] = useState([]);
-    const [displayMode, setDisplayMode] = useState("myPosts");
+    const [displayMode, setDisplayMode] = useState(localStorage.getItem("displayMode"));
     const [inEditing, setInEditing] = useState(-1);
-    const [isAdded, setIsAdded] = useState(false);
-
+    
+    if(selectedPostId!=-1)
+        postId??setSelectedPostId(-1);
     const loadMore = () => {
         if (records === displayedData.length) {
             setHasMore(false);
@@ -38,21 +39,23 @@ const Posts = () => {
         }
     };
 
-    const fetchPosts = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/posts`);
-            const jsonData = await response.json();
-            setAllData(jsonData);
-
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    
 
     useEffect(() => filterAllPosts(), [allData, filtersArr]);
 
     useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/posts`);
+                const jsonData = await response.json();
+                setAllData(jsonData);
+    
+            } catch (error) {
+                console.error(error);
+            }
+        };
         fetchPosts();
+        
     }, []); // Call fetchPosts when the component mounts
 
     function filterAllPosts() {
@@ -88,6 +91,19 @@ const Posts = () => {
         }
     }
 
+function changeDisplayMode(){
+    if(displayMode=="personalPosts")
+    {
+        setFiltersArr(removeFilter("userId"));
+        setDisplayMode("publicPosts");
+        localStorage.setItem("displayMode", "publicPosts")
+    }
+    else{
+        setFiltersArr(updateOrAddFilter("userId", userId));
+        setDisplayMode("personalPosts");
+        localStorage.setItem("displayMode", "personalPosts")
+    }
+}
 
     return (
         <>
@@ -99,9 +115,9 @@ const Posts = () => {
                     <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
                 </label>
             </div>
-            {displayMode === "myPosts" ?
-                <button className={style.ViewAllOrMineBtn} onClick={() => { setFiltersArr(removeFilter("userId")); setDisplayMode("allPosts") }} >press to view all posts</button>
-                : <button className={style.ViewAllOrMineBtn} onClick={() => { setFiltersArr(updateOrAddFilter("userId", userId)); setDisplayMode("myPosts") }} >press to view only my posts</button>}
+            {displayMode === "personalPosts" ?
+                <button className={style.ViewAllOrMineBtn} onClick={()=>changeDisplayMode()} >press to view all posts</button>
+                : <button className={style.ViewAllOrMineBtn} onClick={()=>changeDisplayMode()} >press to view only my posts</button>}
             <Popup trigger=
                 {<div className="addBtn" >create new post<FiPlusCircle /></div>}
                 position="center center"
@@ -110,7 +126,7 @@ const Posts = () => {
                 {close => (
                     <div className="popupContainer">
 
-                        <AddPost setIsAdded={setIsAdded} setAllData={setAllData} closePopUp={close} />
+                        <AddPost setAllData={setAllData} closePopUp={close} />
 
                     </div>
                 )}
@@ -118,6 +134,7 @@ const Posts = () => {
             </Popup>
             <div>
                 <InfiniteScroll
+               
                     pageStart={0}
                     loadMore={loadMore}
                     useWindow={false}>
@@ -134,6 +151,7 @@ const Posts = () => {
                     </div>
 
                 </InfiniteScroll>
+            
             </div>
         </>
     );
