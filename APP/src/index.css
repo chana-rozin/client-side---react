@@ -33,8 +33,11 @@ body {
   background-size: cover; */
   background: url("../src/Images/backGround3.png") center 0 repeat-y;
   background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  height: 3000px;
+  height: 100%;
 }
 
 h1 {

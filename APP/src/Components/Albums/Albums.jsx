@@ -10,27 +10,11 @@ import { FcFolder } from "react-icons/fc";
 
 const Albums = () => {
   const itemsPerPage = 20;
-  const [hasMore, setHasMore] = useState(true);
-  const [records, setRecords] = useState(itemsPerPage);
-
-  const loadMore = () => {
-    if (records === displayedAlbums.length) {
-      setHasMore(false);
-    } else {
-      setTimeout(() => {
-        setRecords(records + itemsPerPage);
-      }, 2000);
-    }
-  };
-
-  const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useContext(userContext);
   const userId = currentUser.id;
   const [filtersArr, setFiltersArr] = useState([{"key":"userId" , "value":userId.toString()}]);
-  const [selectedAlbumId, setSelectedAlbumId] = useState(-1)
   const [displayedAlbums, setDisplayedAlbums] = useState([]);
   const [myAlbums, setMyAlbums] = useState([]);
-  const [isAdded, setIsAdded] = useState(false);
 
   const fetchMyAlbums = async () => {
     try {
@@ -80,8 +64,8 @@ const Albums = () => {
 
   return (
     <>
-      <div>
-        <label> Search by:
+      <div className={style.contorl}>
+        <label> <b>Search by:  </b>
           <label htmlFor="searchById">ID</label>
           <input type="text" placeholder="" name="searchById" onBlur={(e) => handleFilter("id", e.target.value)}></input>
           <label htmlFor="searchByTitle" className={style.title}>Title</label>
@@ -95,21 +79,13 @@ const Albums = () => {
                    { close => (
                        <div className="popupContainer">
                             
-                            <AddAlbum setIsAdded={setIsAdded} setMyAlbums={setMyAlbums} closePopUp={close} />
+                            <AddAlbum setMyAlbums={setMyAlbums} closePopUp={close} />
                             
                         </div>
                     )}
                 
             </Popup>
       </div>
-      <div>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={loadMore}
-          hasMore={hasMore}
-          loader={<h4 className="loader">Loading...</h4>}
-          useWindow={false}>
-          
           <div className={style.listContainer}>{displayedAlbums.map(album => (
             <div key={album.id} className={style.album}>
               <><Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}>
@@ -120,8 +96,6 @@ const Albums = () => {
               </> 
             </div>
           ))}</div>
-        </InfiniteScroll>
-      </div>
     </>
   );
 };

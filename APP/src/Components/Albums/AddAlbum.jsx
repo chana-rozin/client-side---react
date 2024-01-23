@@ -42,7 +42,6 @@ const AddAlbum = (props) => {
             if (response.status === 201) {
                 increaseAlbumId();
                 setMyAlbums(prevArr => [...prevArr, newAlbum]);
-                setIsAdded(true);
             } else {
                 setErrMessage("500 something get wrong:( try later.");
             }
