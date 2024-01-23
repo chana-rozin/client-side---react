@@ -33,16 +33,10 @@ const Login = () => {
     <>
       <div className={style.wrapper}>
         <h1>Please Log In</h1>
-        <form onSubmit={handleFormSubmit} className={style.form}>
-          <div className={style.inputBox}>
+        <form onSubmit={handleFormSubmit} className={style.inputBox}>
             <input name="username" type="text" placeholder="username" required />
-            </div>
-            <div className={style.inputBox}>
             <input name="password" type="password" placeholder="password" required />
-            </div>
-          <div>
             <button type="submit">Submit</button>
-          </div>
         </form>
         <p>{errorMessage}</p>
         <p className={style.link}>

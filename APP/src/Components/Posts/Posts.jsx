@@ -126,7 +126,7 @@ const Posts = () => {
                             {selectedPostId !== post.id ? <>
                                 <span className={style.postDetails}>{post.id}. </span>
                                 <span className={style.postDetails}>{post.title}</span>
-                                <button className={style.openBtn} disabled={selectedPostId !== -1} onClick={() => {setSelectedPostId(post.id); navigate(post.id)}}><IoIosArrowBack /></button>
+                                <button className={style.openBtn}disabled={selectedPostId !== -1} onClick={() => setSelectedPostId(post.id)}><IoIosArrowBack /></button>
                             </>
                                 : <PostDetails post={post} setAllData={setAllData} inEditing={inEditing} setInEditing={setInEditing} setSelectedPostId={setSelectedPostId} />}
                         </div>
