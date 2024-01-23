@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { userContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
+import style from "./Login.module.css";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,22 +31,24 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-wrapper">
+      <div className={style.wrapper}>
         <h1>Please Log In</h1>
-        <form onSubmit={handleFormSubmit}>
-          <label htmlFor="username">Username</label>
-          <input name="username" type="text" required />
-          <label htmlFor="password">Password</label>
-          <input name="password" type="password" required />
+        <form onSubmit={handleFormSubmit} className={style.form}>
+          <div className={style.inputBox}>
+            <input name="username" type="text" placeholder="username" required />
+            </div>
+            <div className={style.inputBox}>
+            <input name="password" type="password" placeholder="password" required />
+            </div>
           <div>
             <button type="submit">Submit</button>
           </div>
         </form>
+        <p>{errorMessage}</p>
+        <p className={style.link}>
+          Don't have an account yet? Let's <Link to={"/register"}>sign up</Link>
+        </p>
       </div>
-      <p>{errorMessage}</p>
-      <p>
-        Don't have an account yet? Let's <Link to={"/register"}>sign up</Link>
-      </p>
     </>
   );
 };

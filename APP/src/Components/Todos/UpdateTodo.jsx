@@ -10,7 +10,7 @@ const UpdateTodo = (props) => {
             title: event.target.title.value,
             completed: event.target.completed.checked,
         };
-
+        
         try {
             const response = await fetch(`http://localhost:3000/todos/${todo.id}`, {
                 method: "PUT",

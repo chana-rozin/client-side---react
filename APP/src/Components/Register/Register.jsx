@@ -37,7 +37,7 @@ const Register = () => {
 
   const handlePasswordVerifyChange = (event) => {
     event.preventDefault();
-    setIsPasswordVerified(password === event.target.value);
+    setIsPasswordVerified(passwords.password === event.target.value);
   };
 
   const handlePasswordChange = (event) => {

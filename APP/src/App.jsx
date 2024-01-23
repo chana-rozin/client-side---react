@@ -12,13 +12,11 @@ import Layout from './Components/Layout/Layout'
 import { React, createContext, useState } from 'react'
 import { ReactDOM } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom'
+import PostDetails from './Components/Posts/PostDetails'
 export const userContext = createContext()
 
 function App() {
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("currentUser")));
-  fetch("http://localhost:3000/users/2")
-    .then(re => re.json())
-    .then(r => console.log(r));
 
   return (
     <>
@@ -38,6 +36,7 @@ function App() {
                   <Route path=':albumId/photos' element={<Photos />} />
                 </Route>
                 <Route path='posts' element={<Posts />} >
+                  <Route path=':postId' element={<PostDetails />} />
                   <Route path=':postId/comments' element={<Comments />} />
                 </Route>
               </Route>

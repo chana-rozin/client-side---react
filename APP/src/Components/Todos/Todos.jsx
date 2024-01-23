@@ -116,7 +116,7 @@ const Todos = () => {
                         <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilterBy("title", e.target.value)}></input>
                         <label htmlFor="searchByCompleted">Completed</label>
                         <input type="checkbox" name="searchByCompleted" onChange={(e) => handleFilterBy("completed", e.target.checked ? true : "")}></input></label>
-                        <Select className={style.filter} options={options} name="sortBy" placeholder="sort by" onChange={(e) => setSortBy(e.value) } />
+                    <Select className={style.filter} options={options} name="sortBy" placeholder="sort by" onChange={(e) => setSortBy(e.value)} />
                 </div>
                 <Popup trigger=
                     {<div className="addBtn" >new todo<FiPlusCircle /></div>}
@@ -130,11 +130,9 @@ const Todos = () => {
 
                         </div>
                     )}
-
                 </Popup>
                 <div className={style.listContainer}>
                     {toShowTodosArr.map((todo, index) =>
-
                     (<div key={index} className={style.todo}>
                         {index != inEditing ? <>
                             <input readOnly type="checkbox" name="completed" checked={todo.completed} />
@@ -142,11 +140,8 @@ const Todos = () => {
                             <span> {todo.title} </span>
                             <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></> :
-
                             <UpdateTodo todo={todo} setInEditing={setInEditing} setTodosArr={setTodosArr} />}
-
                     </div>
-
                     ))}
                     <Outlet />
                 </div></div>
