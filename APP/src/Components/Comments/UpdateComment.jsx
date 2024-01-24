@@ -1,7 +1,7 @@
 import React from "react";
 
 const UpdateComment = (props) => {
-  const { comment, setInEditing, setCommentsArr } = props;
+  const { comment, setInEditing, commentsArr,setCommentsArr } = props;
 
   async function handleCommentUpdate(event) {
     event.preventDefault();
@@ -19,9 +19,10 @@ const UpdateComment = (props) => {
 
       if (response.ok) {
         setInEditing(-1);
-        setCommentsArr((prevArr) =>
-          prevArr.map((el) => (el.id === comment.id ? { ...el, body: updatedBody } : el))
-        );
+        const updateData=commentsArr.map(el => (el.id === comment.id ? { ...comment, body: updatedBody } : el));
+        setCommentsArr(updateData);
+        localStorage.setItem("comments", JSON.stringify({user:currentUser.id,data:updateData}));
+        updateCacheFrequencies("comments")
       } else {
         console.error("Failed to update comment");
       }

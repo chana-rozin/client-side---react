@@ -1,10 +1,9 @@
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom"
-import React, { useContext } from "react";
+import { Link, Outlet, useNavigate} from "react-router-dom"
+import React, { useContext} from "react";
 import { userContext } from "../../App";
 import style from "./Layout.module.css";
 
 const Layout = () => {
-
     const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useContext(userContext);
     const userId = currentUser.id;;

@@ -89,9 +89,10 @@ const Comments = () => {
                                 )}
                             </>
                         ) : (
-                            <UpdateComment comment={comment} setInEditing={setInEditingCommentId} setCommentsArr={setCommentsArr} />
+                            <UpdateComment comment={comment} setInEditing={setInEditingCommentId} commentsAr={commentsArr} setCommentsArr={setCommentsArr} />
                         )}
                     </div>
+
                 ))}
             </div>
         </>

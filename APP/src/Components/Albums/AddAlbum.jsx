@@ -42,7 +42,7 @@ const AddAlbum = (props) => {
             });
 
             if (response.ok) {
-                increaseAlbumId();
+                increaseAlbumId(newAlbum);
                 let updateData;
                 setMyAlbumsArr((prevArr) => {updateData=[...prevArr, newAlbum];
                     return updateData;});
