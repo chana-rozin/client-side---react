@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
+import { cacheContext } from "../../App";
 import "../commonStyle/popupStyle.css"
 
 const AddPhoto = (props) => {
     const { albumId, setPhotosArr, closePopUp } = props;
     const { currentUser } = useContext(userContext);
+    const {updateCacheFrequencies} = useContext(cacheContext);
     const navigate = useNavigate();
 
     const newPhoto = {
@@ -26,26 +28,29 @@ const AddPhoto = (props) => {
         closePopUp();
     }
 
-    async function addPhoto() {
-        try {
-            const response = await fetch("http://localhost:3000/photos", {
+    async function addPhoto(){
+          fetch("http://localhost:3000/photos", {
                 method: 'POST',
                 body: JSON.stringify(newPhoto),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
-            });
-
-            if (response.status === 201) {
+            })
+            .then(response=>{if(response.ok) {
                 increasePhotoId();
-                setPhotosArr(prevArr => [...prevArr, newPhoto]);
+                let updateData;
+                setPhotosArr(prevArr => {
+                    updateData = [...prevArr, newPhoto];
+                    return updateData;
+                });
+                localStorage.setItem("photos", JSON.stringify({ user: currentUser.id, data: updateData }))
+                updateCacheFrequencies("photos");
             } else {
                 console.error("Failed to add photo");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
+            }})
+         .catch(error =>
+            console.error(error));
+         }
 
     function increasePhotoId() {
         fetch("http://localhost:3000/config/1", {
@@ -71,7 +76,7 @@ const AddPhoto = (props) => {
 
     return (
         <>
-            
+
             <div className="container">
                 <p>Add your photo:</p>
                 <form onSubmit={handleAddBtn}>

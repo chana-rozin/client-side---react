@@ -1,9 +1,12 @@
 import React from "react";
+import { useContext } from "react";
 import { cacheContext } from "../../App";
+import { userContext } from "../../App";
 
 const UpdateTodo = (props) => {
     const { todo, setInEditing, todosArr,setTodosArr } = props;
     const {updateCacheFrequencies} = useContext(cacheContext);
+    const {currentUser} = useContext(userContext);
     const handleTodoUpdate = async (event) => {
         event.preventDefault();
         const updatedTodo = {

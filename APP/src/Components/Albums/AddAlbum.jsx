@@ -40,7 +40,7 @@ const AddAlbum = (props) => {
             });
 
             if (response.status === 201) {
-                increaseAlbumId();
+                increaseAlbumId(newAlbum);
                 setMyAlbums(prevArr => [...prevArr, newAlbum]);
             } else {
                 setErrMessage("500 something get wrong:( try later.");
@@ -50,10 +50,10 @@ const AddAlbum = (props) => {
         }
     }
 
-    function increaseAlbumId() {
+    function increaseAlbumId(newAlbum) {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "albumId": Number(album.id) + 1 }),
+            body: JSON.stringify({ "albumId": Number(newAlbum.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },

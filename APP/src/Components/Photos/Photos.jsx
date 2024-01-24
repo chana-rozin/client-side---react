@@ -17,7 +17,7 @@ const Photos = () => {
     const { albumId, albumTitle } = location.state;
     const {cacheGet, updateCacheFrequencies} = useContext(cacheContext);
     const {currentUser} = useContext(userContext);
-    const [photosArr, setPhotosArr] = useState(cacheGet());
+    const [photosArr, setPhotosArr] = useState(cacheGet("photos"));
     const [inEditing, setInEditing] = useState(-1);
     const [start, setStart] = useState(photosArr.length);
     const photosPerFetch = 12;
@@ -53,7 +53,7 @@ const Photos = () => {
                    { const updataData=photosArr.filter(photo => photo.id != id);
                     localStorage.setItem("photos", JSON.stringify({user:currentUser.id,data:updataData}))
                     updateCacheFrequencies("photos");
-                    setTodosArr(updataData);}
+                    setPhotosArr(updataData);}
                 });
     }
 

@@ -37,7 +37,7 @@ const Todos = () => {
                 })
                 .catch(error =>
                     console.error(error));
-        if(!toShowTodosArr.length)
+        if(!todosArr.length)
             fetchTodos();
     }, []);
 
@@ -151,7 +151,7 @@ const Todos = () => {
                             <span> {todo.title} </span>
                             <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></> :
-                            <UpdateTodo todo={todo} setInEditing={setInEditing} setTodosArr={setTodosArr} />}
+                            <UpdateTodo todo={todo} setInEditing={setInEditing} todosArr={todosArr} setTodosArr={setTodosArr} />}
                     </div>
                     ))}
                     <Outlet />
