@@ -22,15 +22,14 @@ const Comments = () => {
 
     useEffect(() => {
         const fetchComments = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/comments?postId=${postId}`);
-                const data = await response.json();
-                localStorage.setItem("comments",JSON.stringify({user:currentUser.id,data:data}));
+            fetch(`http://localhost:3000/comments?postId=${postId}`)
+            .then(response=> response.json())
+            .then(data=>
+                {localStorage.setItem("comments",JSON.stringify({user:currentUser.id,data:data}));
                 updateCacheFrequencies("comments");
-                setCommentsArr(data);
-            } catch (error) {
-                console.error(error);
-            }
+                setCommentsArr(data);})
+            .catch (error=>
+                console.error(error));
         };
         if(!commentsArr.length)
            fetchComments();
