@@ -13,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html{
+  background-image: url("../src/Images/12.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -28,6 +35,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  
 }
 
 h1 {

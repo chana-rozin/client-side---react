@@ -1,13 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 
-    *{
-    background-image: url("../src/Images/12.jpg");
-    background-size: cover;
-    background-position: center center;
-    background-attachment: fixed;
-}
-
 .wrapper body {
     display: flex;
     justify-content: center;
