@@ -22,15 +22,13 @@ const Albums = () => {
 
 
   const fetchMyAlbums = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/albums?userId=${userId}`);
-      const jsonData = await response.json();
-      localStorage.setItem("albums", JSON.stringify({ user: currentUser.id, data: jsonData }));
+    fetch(`http://localhost:3000/albums?userId=${userId}`)
+     .then(response=>response.json())
+      .then(data=>{localStorage.setItem("albums", JSON.stringify({ user: currentUser.id, data: data }));
       updateCacheFrequencies("albums");
-      setMyAlbumsArr(jsonData);
-    } catch (error) {
-      console.error(error);
-    }
+      setMyAlbumsArr(data);})
+    .catch (error=>
+      console.error(error))
   };
 
   useEffect(() => filterMyAlbumsArr(), [myAlbumsArr, filtersArr]);
