@@ -39,7 +39,7 @@ const Todos = () => {
     }, []);
 
     useEffect(() => { setToShowTodosArr(todosArr) }, [todosArr]);
-    useEffect(() => { handleFilterBy(); handleSortBy() }, [inEditing, isAdded]);
+    useEffect(() => { filterTodos(filtersArr); handleSortBy() }, [inEditing, isAdded]);
 
 
 
@@ -57,17 +57,21 @@ const Todos = () => {
             });
     }
 
-    function handleFilterBy(filterKey, inputValue) {
-        const updateFilters = inputValue === ""
-            ? removeFilter(filtersArr, filterKey)
-            : updateOrAddFilter(filtersArr, filterKey, inputValue);
-        setFiltersArr(updateFilters);
+    function filterTodos(updateFilters) {
         setToShowTodosArr(
             todosArr.filter(todo =>
                 updateFilters.every(filter =>
                     todo[filter.key] === filter.value)
             )
         );
+    }
+
+    function handleFilterBy(filterKey, inputValue) {
+        const updateFilters = inputValue === ""
+            ? removeFilter(filtersArr, filterKey)
+            : updateOrAddFilter(filtersArr, filterKey, inputValue);
+        setFiltersArr(updateFilters);
+        filterTodos(updateFilters)
     }
 
     function removeFilter(filters, keyToRemove) {
