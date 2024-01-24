@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import InfiniteScroll from "react-infinite-scroller";
+import { Link} from 'react-router-dom';
 import style from "./Albums.module.css"
 import { userContext } from "../../App";
 import Popup from 'reactjs-popup';
@@ -9,11 +8,8 @@ import AddAlbum from './AddAlbum';
 import { FcFolder } from "react-icons/fc";
 import { cacheContext } from "../../App";
 
-
-
 const Albums = () => {
-  const itemsPerPage = 20;
-  const { currentUser, setCurrentUser } = useContext(userContext);
+  const { currentUser,} = useContext(userContext);
   const userId = currentUser.id;
   const [filtersArr, setFiltersArr] = useState([{ "key": "userId", "value": userId.toString() }]);
   const [displayedAlbums, setDisplayedAlbums] = useState([]);

@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import { cacheContext } from "../../App";
 import "../commonStyle/popupStyle.css"
@@ -8,9 +7,8 @@ const AddPhoto = (props) => {
     const { albumId, setPhotosArr, closePopUp } = props;
     const { currentUser } = useContext(userContext);
     const {updateCacheFrequencies} = useContext(cacheContext);
-    const navigate = useNavigate();
 
-    const newPhoto = {
+    const photo = {
         albumId: albumId,
         id: "0",
         title: "",
@@ -20,63 +18,58 @@ const AddPhoto = (props) => {
 
     async function handleAddBtn(event) {
         event.preventDefault();
-        newPhoto.title = event.target.title.value;
-        newPhoto.url = event.target.url.value;
-        newPhoto.thumbnailUrl = event.target.thumbnailUrl.value;
-        newPhoto.id = await getPhotoId();
+        photo.title = event.target.title.value;
+        photo.url = event.target.url.value;
+        photo.thumbnailUrl = event.target.thumbnailUrl.value;
+        photo.id = await getPhotoId();
         addPhoto();
         closePopUp();
     }
 
     async function addPhoto(){
-          fetch("http://localhost:3000/photos", {
-                method: 'POST',
-                body: JSON.stringify(newPhoto),
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-            })
-            .then(response=>{if(response.ok) {
-                increasePhotoId();
-                let updateData;
-                setPhotosArr(prevArr => {
-                    updateData = [...prevArr, newPhoto];
-                    return updateData;
-                });
-                localStorage.setItem("photos", JSON.stringify({ user: currentUser.id, data: updateData }))
-                updateCacheFrequencies("photos");
-            } else {
-                console.error("Failed to add photo");
-            }})
-         .catch(error =>
-            console.error(error));
-         }
+        fetch("http://localhost:3000/photos", {
+            method: 'POST',
+            body: JSON.stringify(photo),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        .then(response=>{
+            if(response.ok) {
+            increasePhotoId();
+            let updateData;
+            setPhotosArr(prevArr => {
+                updateData = [...prevArr, photo];
+                return updateData;
+            });
+            localStorage.setItem("photos", JSON.stringify({ user: currentUser.id, data: updateData }))
+            updateCacheFrequencies("photos");
+        }
+        })
+        .catch(error =>console.error(error));
+    }
 
     function increasePhotoId() {
         fetch("http://localhost:3000/config/1", {
             method: 'PATCH',
-            body: JSON.stringify({ "photoId": parseInt(newPhoto.id, 10) + 1 }),
+            body: JSON.stringify({ "photoId": Number(photo.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
         })
-            .catch(err => console.error(err))
+        .catch(err => console.error(err))
     }
 
     async function getPhotoId() {
-        try {
-            const id = await fetch("http://localhost:3000/config/1")
-                .then(result => result.json())
-                .then(json => json.photoId.toString());
-            return id;
-        } catch (error) {
-            console.error(error);
-        }
+        const id = await fetch("http://localhost:3000/config/1")
+            .then(result => result.json())
+            .then(json => json.photoId.toString())
+            .catch(err => console.error(err));
+        return id;
     }
 
     return (
         <>
-
             <div className="container">
                 <p>Add your photo:</p>
                 <form onSubmit={handleAddBtn}>
