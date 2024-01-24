@@ -1,21 +1,23 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import {React, useContext, useState }from "react";
+import { useNavigate} from "react-router-dom";
 import { userContext } from "../../App";
+import { cacheContext } from "../../App";
 
 const AddTodo = (props) => {
     const { setTodosArr, closePopUp, setIsAdded } = props;
-    const { currentUser } = React.useContext(userContext);
+    const { currentUser } = useContext(userContext);
+    const {cacheGet,updateCacheFrequencies} = useContext(cacheContext)
     const userId = currentUser.id;
     const navigate = useNavigate();
 
     const initialTodo = {
         userId: "0",
-        id: 0,
+        id: getTodoId(),
         title: "",
         completed: false,
     };
 
-    const [todo, setTodo] = React.useState({ ...initialTodo });
+    const [todo, setTodo] = useState({ ...initialTodo });
 
     const handleAddBtn = async (event) => {
         event.preventDefault();
@@ -24,7 +26,6 @@ const AddTodo = (props) => {
             userId,
             title: event.target.title.value,
             completed: event.target.completed.checked,
-            id: await getTodoId(),
         };
         addTodo(updatedTodo);
         closePopUp();
@@ -41,13 +42,15 @@ const AddTodo = (props) => {
             });
 
             if (response.ok) {
-                increaseTodoId();
+                increaseTodoId(newTodo);
                 let updateData;
-                setTodosArr((prevArr) => {updateData=[...prevArr, newTodo];
-                return updateData;});
+                setTodosArr((prevArr) => {
+                    updateData = [...prevArr, newTodo];
+                    return updateData;
+                });
                 setIsAdded(true);
-                    localStorage.setItem("todos", JSON.stringify({user:currentUser.id,data:updateData}))
-                    updateCacheFrequencies("todos");
+                localStorage.setItem("todos", JSON.stringify({ user: currentUser.id, data: updateData }))
+                updateCacheFrequencies("todos");
             } else {
                 console.error("Failed to add todo");
             }
@@ -56,10 +59,10 @@ const AddTodo = (props) => {
         }
     };
 
-    const increaseTodoId = () => {
+    const increaseTodoId = (newTodo) => {
         fetch("http://localhost:3000/config/1", {
             method: "PATCH",
-            body: JSON.stringify({ todoId: Number(todo.id) + 1 }),
+            body: JSON.stringify({ todoId: Number(initialTodo.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
@@ -83,8 +86,8 @@ const AddTodo = (props) => {
             <div className="container">
                 <p>add your todo:</p>
                 <form onSubmit={handleAddBtn}>
-                    <input type="checkbox" name="completed" />
-                    <lable htmlfor="completed">completed</lable>
+                    
+                    <p>completed   <input type="checkbox" name="completed" /></p>
                     <input
                         placeholder="your todo title:"
                         type="text"

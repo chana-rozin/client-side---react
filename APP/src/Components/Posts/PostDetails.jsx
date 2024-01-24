@@ -28,7 +28,7 @@ const PostDetails = (props) => {
                     const updataData=postsArr.filter(post => post.id != id);
                     localStorage.setItem("posts", JSON.stringify({user:currentUser.id,data:updataData}))
                     updateCacheFrequencies("posts");
-                    setTodosArr(updataData);
+                    setPostsArr(updataData);
                 }
             })
             .catch(error => console.error(error));

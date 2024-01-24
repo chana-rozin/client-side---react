@@ -26,7 +26,7 @@ const Posts = () => {
     const [filtersArr, setFiltersArr] = useState([{ "key": "userId", "value": userId.toString() }]);
     const [selectedPostId, setSelectedPostId] = useState(postId ?? -1);
     const [displayedData, setDisplayedData] = useState([]);
-    const [postsArr, setPostsArr] = useState([]);
+    const [postsArr, setPostsArr] = useState(cacheGet("posts"));
     const [displayMode, setDisplayMode] = useState(localStorage.getItem("displayMode"));
     const [inEditing, setInEditing] = useState(-1);
 
@@ -52,7 +52,7 @@ const Posts = () => {
                 .then(response=>response.json())
                 .then(jsonData=>{
                     setPostsArr(jsonData);
-                    localStorage.setItem("posts",JSON.stringify({user:userId,data:data}))
+                    localStorage.setItem("posts",JSON.stringify({user:userId,data:jsonData}))
                     updateCacheFrequencies("posts");
                 })
             .catch( (error) =>console.error(error))

@@ -34,8 +34,12 @@ const AddPost = (props) => {
         })
             .then((response) => {
                 if (response.status === 201) {
+                    let updateData;
                     increasePostId();
-                    setPostsArr(prevArr => [...prevArr, post]);
+                    setPostsArr(prevArr => {updateData = [...prevArr, post];
+                    return updateData});
+                    localStorage.setItem("posts", JSON.stringify({ user: currentUser.id, data: updateData }))
+                updateCacheFrequencies("photos");
                 }
                 else {
                     setErrMessage("500 something get worng:( try latter.")
