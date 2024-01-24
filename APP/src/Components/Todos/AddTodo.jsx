@@ -12,7 +12,7 @@ const AddTodo = (props) => {
 
     const initialTodo = {
         userId: "0",
-        id: getTodoId(),
+        id: 0,
         title: "",
         completed: false,
     };
@@ -26,6 +26,7 @@ const AddTodo = (props) => {
             userId,
             title: event.target.title.value,
             completed: event.target.completed.checked,
+            id: await getTodoId(),
         };
         addTodo(updatedTodo);
         closePopUp();
@@ -62,7 +63,7 @@ const AddTodo = (props) => {
     const increaseTodoId = (newTodo) => {
         fetch("http://localhost:3000/config/1", {
             method: "PATCH",
-            body: JSON.stringify({ todoId: Number(initialTodo.id) + 1 }),
+            body: JSON.stringify({ todoId: Number(newTodo.id) + 1 }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
