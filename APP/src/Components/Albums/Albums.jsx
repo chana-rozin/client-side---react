@@ -7,33 +7,41 @@ import Popup from 'reactjs-popup';
 import { FiPlusCircle } from "react-icons/fi";
 import AddAlbum from './AddAlbum';
 import { FcFolder } from "react-icons/fc";
+import { cacheContext } from "../../App";
+
+
 
 const Albums = () => {
   const itemsPerPage = 20;
   const { currentUser, setCurrentUser } = useContext(userContext);
   const userId = currentUser.id;
-  const [filtersArr, setFiltersArr] = useState([{"key":"userId" , "value":userId.toString()}]);
+  const [filtersArr, setFiltersArr] = useState([{ "key": "userId", "value": userId.toString() }]);
   const [displayedAlbums, setDisplayedAlbums] = useState([]);
-  const [myAlbums, setMyAlbums] = useState([]);
+  const {cacheGet, updateCacheFrequencies } = useContext(cacheContext);
+  const [myAlbumsArr, setMyAlbumsArr] = useState(cacheGet("albums"));
+
 
   const fetchMyAlbums = async () => {
     try {
       const response = await fetch(`http://localhost:3000/albums?userId=${userId}`);
       const jsonData = await response.json();
-      setMyAlbums(jsonData);
+      localStorage.setItem("albums", JSON.stringify({ user: currentUser.id, data: jsonData }));
+      updateCacheFrequencies("albums");
+      setMyAlbumsArr(jsonData);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => filterMyAlbums(), [myAlbums, filtersArr]);
+  useEffect(() => filterMyAlbumsArr(), [myAlbumsArr, filtersArr]);
 
   useEffect(() => {
-    fetchMyAlbums();
+    if (!myAlbumsArr.length)
+      fetchMyAlbums();
   }, []); // Call fetchMyAlbums when the component mounts
 
-  function filterMyAlbums() {
-    const filteredAlbumsArr = myAlbums.filter(album =>
+  function filterMyAlbumsArr() {
+    const filteredAlbumsArr = myAlbumsArr.filter(album =>
       filtersArr.every(filter =>
         album[filter.key] === filter.value
       )
@@ -58,7 +66,7 @@ const Albums = () => {
       return filtersArr.map(el =>
         el.key === keyToUpdate ? { ...el, value } : el);
     } else {
-      return [...filtersArr,  { key: keyToUpdate, value }];
+      return [...filtersArr, { key: keyToUpdate, value }];
     }
   }
 
@@ -72,30 +80,30 @@ const Albums = () => {
           <input type="text" placeholder="" name="searchByTitle" onBlur={(e) => handleFilter("title", e.target.value)}></input>
         </label>
         <Popup trigger=
-                {<div className="addBtn" >create new album<FiPlusCircle /></div>}
-                position="center center"
-                closeOnDocumentClick>
-                
-                   { close => (
-                       <div className="popupContainer">
-                            
-                            <AddAlbum setMyAlbums={setMyAlbums} closePopUp={close} />
-                            
-                        </div>
-                    )}
-                
-            </Popup>
-      </div>
-          <div className={style.listContainer}>{displayedAlbums.map(album => (
-            <div key={album.id} className={style.album}>
-              <><Link to={`${album.id}/photos`} state={{albumId:album.id,albumTitle:album.title}}>
-                <div><FcFolder size={200}/></div>
-                <span>{album.id}. </span> 
-                {album.title}
-                </Link>
-              </> 
+          {<div className="addBtn" >create new album<FiPlusCircle /></div>}
+          position="center center"
+          closeOnDocumentClick>
+
+          {close => (
+            <div className="popupContainer">
+
+              <AddAlbum setMyAlbumsArr={setMyAlbumsArr} closePopUp={close} />
+
             </div>
-          ))}</div>
+          )}
+
+        </Popup>
+      </div>
+      <div className={style.listContainer}>{displayedAlbums.map(album => (
+        <div key={album.id} className={style.album}>
+          <><Link to={`${album.id}/photos`} state={{ albumId: album.id, albumTitle: album.title }}>
+            <div><FcFolder size={200} /></div>
+            <span>{album.id}. </span>
+            {album.title}
+          </Link>
+          </>
+        </div>
+      ))}</div>
     </>
   );
 };

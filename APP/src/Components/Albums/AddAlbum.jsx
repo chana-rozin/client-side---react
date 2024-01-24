@@ -1,10 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { userContext } from "../../App";
+import { cacheContext } from "../../App";
 
 const AddAlbum = (props) => {
-    const { setMyAlbums, closePopUp, setIsAdded } = props;
+    const { setMyAlbumsArr, closePopUp} = props;
     const { currentUser, setCurrentUser } = useContext(userContext);
+    const {cacheGet,updateCacheFrequencies} = useContext(cacheContext);
     const userId = currentUser.id;
     const navigate = useNavigate();
 
@@ -39,9 +41,13 @@ const AddAlbum = (props) => {
                 },
             });
 
-            if (response.status === 201) {
+            if (response.ok) {
                 increaseAlbumId();
-                setMyAlbums(prevArr => [...prevArr, newAlbum]);
+                let updateData;
+                setMyAlbumsArr((prevArr) => {updateData=[...prevArr, newAlbum];
+                    return updateData;});
+                localStorage.setItem("albums", JSON.stringify({user:currentUser.id,data:updateData}))
+                updateCacheFrequencies("albums");
             } else {
                 setErrMessage("500 something get wrong:( try later.");
             }
