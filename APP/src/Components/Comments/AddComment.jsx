@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import { userContext } from "../../App";
+import { cacheContext } from "../../App";
 
 const AddComment = (props) => {
-    const { postId, setCommentsData, closePopUp } = props;
+    const { postId, setCommentsArr, closePopUp } = props;
     const { currentUser } = useContext(userContext);
+    const {cacheGet,updateCacheFrequencies} = useContext(cacheContext);
+
     const navigate = useNavigate();
 
     const defaultComment = {
@@ -41,9 +44,13 @@ const AddComment = (props) => {
                 },
             });
 
-            if (response.status === 201) {
+            if (response.ok) {
                 increaseCommentId();
-                setCommentsData((prevArr) => [...prevArr, newComment]);
+                let updateData;
+                setCommentsArr((prevArr) => {updateData=[...prevArr, newComment];
+                    return updateData;});
+                localStorage.setItem("comments", JSON.stringify({user:currentUser.id,data:updateData}))
+                updateCacheFrequencies("comments");
             } else {
                 setErrMessage("500 something get wrong:( try later.");
             }

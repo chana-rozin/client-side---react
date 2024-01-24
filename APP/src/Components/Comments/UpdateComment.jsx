@@ -1,7 +1,7 @@
 import React from "react";
 
 const UpdateComment = (props) => {
-  const { comment, setInEditing, setCommentsData } = props;
+  const { comment, setInEditing, setCommentsArr } = props;
 
   async function handleCommentUpdate(event) {
     event.preventDefault();
@@ -19,7 +19,7 @@ const UpdateComment = (props) => {
 
       if (response.ok) {
         setInEditing(-1);
-        setCommentsData((prevArr) =>
+        setCommentsArr((prevArr) =>
           prevArr.map((el) => (el.id === comment.id ? { ...el, body: updatedBody } : el))
         );
       } else {
