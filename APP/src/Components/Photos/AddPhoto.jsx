@@ -4,7 +4,7 @@ import { cacheContext } from "../../App";
 import "../commonStyle/popupStyle.css"
 
 const AddPhoto = (props) => {
-    const { albumId, setPhotosArr, closePopUp } = props;
+    const { albumId, hasMore, photosArr, setPhotosArr, closePopUp } = props;
     const { currentUser } = useContext(userContext);
     const {updateCacheFrequencies} = useContext(cacheContext);
 
@@ -37,13 +37,10 @@ const AddPhoto = (props) => {
         .then(response=>{
             if(response.ok) {
             increasePhotoId();
-            let updateData;
-            setPhotosArr(prevArr => {
-                updateData = [...prevArr, photo];
-                return updateData;
-            });
-            localStorage.setItem("photos", JSON.stringify({ user: currentUser.id, data: updateData }))
-            updateCacheFrequencies("photos");
+            const updateData = [...photosArr,photo];
+            !hasMore && setPhotosArr(updateData);
+            localStorage.setItem(`album${albumId}Photos`, JSON.stringify({ user: currentUser.id, data: updateData }))
+            updateCacheFrequencies(`album${albumId}Photos`);
         }
         })
         .catch(error =>console.error(error));

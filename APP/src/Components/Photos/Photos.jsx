@@ -15,9 +15,9 @@ import { cacheContext } from "../../App";
 const Photos = () => {
     const location = useLocation()
     const { albumId, albumTitle } = location.state;
-    const {cacheGet, updateCacheFrequencies} = useContext(cacheContext);
-    const {currentUser} = useContext(userContext);
-    const [photosArr, setPhotosArr] = useState(cacheGet("photos"));
+    const { cacheGet, updateCacheFrequencies } = useContext(cacheContext);
+    const { currentUser } = useContext(userContext);
+    const [photosArr, setPhotosArr] = useState(cacheGet(`album${albumId}Photos`));
     const [inEditing, setInEditing] = useState(-1);
     const [start, setStart] = useState(photosArr.length);
     const photosPerFetch = 12;
@@ -31,15 +31,15 @@ const Photos = () => {
                 setPhotosArr(updateData);
                 setHasMore(data.length === photosPerFetch)
                 setStart(prev => prev + data.length)
-                localStorage.setItem("photos", JSON.stringify({user:currentUser.id,data:updateData}));
-                updateCacheFrequencies("photos");
+                localStorage.setItem(`album${albumId}Photos`, JSON.stringify({ user: currentUser.id, data: updateData }));
+                updateCacheFrequencies(`album${albumId}Photos`);
             })
             .catch(error =>
                 console.error(error));
 
 
     useEffect(() => {
-        if(!photosArr.length)
+        if (!photosArr.length)
             fetchPhotos();
     }, []);
 
@@ -48,13 +48,17 @@ const Photos = () => {
         fetch(`http://localhost:3000/photos/${id}`, {
             method: 'DELETE',
         })
-            .then(response => 
-                {if(response.ok)
-                   { const updataData=photosArr.filter(photo => photo.id != id);
-                    localStorage.setItem("photos", JSON.stringify({user:currentUser.id,data:updataData}))
-                    updateCacheFrequencies("photos");
-                    setPhotosArr(updataData);}
-                });
+            .then(response => {
+                if (response.ok) {
+                    let updataData;
+                    setPhotosArr(prev => {
+                        updataData = prev.filter(photo => photo.id != id);
+                        return updataData;
+                    });
+                    localStorage.setItem(`album${albumId}Photos`, JSON.stringify({ user: currentUser.id, data: updataData }))
+                    updateCacheFrequencies(`album${albumId}Photos`);
+                }
+            });
     }
 
 
@@ -68,7 +72,7 @@ const Photos = () => {
                 {close => (
                     <div className="popupContainer"> <div className={style.popup_overlay} >
 
-                        <AddPhoto albumId={albumId} setPhotosArr={setPhotosArr} closePopUp={close} />
+                        <AddPhoto albumId={albumId} hasMore={hasMore} photosArr={photosArr} setPhotosArr={setPhotosArr} closePopUp={close} />
 
                     </div></div>
                 )}
@@ -89,7 +93,7 @@ const Photos = () => {
                             <span onClick={() => deletePhoto(photo.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(photo.id)}><MdOutlineEdit /></span>
                         </>
-                            : <UpdatePhoto photo={photo} setInEditing={setInEditing} photosArr={photosArr} setPhotosArr={setPhotosArr} />}
+                            : <UpdatePhoto photo={photo} setInEditing={setInEditing} hasMore={hasMore} photosArr={photosArr} setPhotosArr={setPhotosArr} />}
                     </span>
                 )}</div>
 

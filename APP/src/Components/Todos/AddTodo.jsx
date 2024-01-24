@@ -73,7 +73,7 @@ const AddTodo = (props) => {
                 <p>add your todo:</p>
                 <form onSubmit={handleAddBtn}>
                     <p>completed   <input type="checkbox" name="completed" /></p>
-                    <input placeholder="your todo title:" type="text" name="title" value={todo.title} onChange={(e) => setTodo({ ...todo, title: e.target.value })}/>
+                    <input placeholder="your todo title:" type="text" name="title"/>
                     <input type="submit" value="Add"></input>
                 </form>
             </div>

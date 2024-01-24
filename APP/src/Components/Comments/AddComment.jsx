@@ -18,7 +18,6 @@ const AddComment = (props) => {
     async function handleAddBtn(event) {
         event.preventDefault();
         comment.name = event.target.name.value,
-        comment.email = event.target.email.value,
         comment.body = event.target.body.value,
         comment.id = await getCommentId(),
         addComment();
