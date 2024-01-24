@@ -1,36 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 
-.wrapper body{
+    *{
+    background-image: url("../src/Images/12.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+.wrapper body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background:url("../../Images/12.jpg");
-    background-size: cover;
-    background-position: center;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
 }
 
 .wrapper {
     width: 420px;
     background: transparent;
-    border:2px solid rgba(255, 255, 255, .2);
-    backdrop-filter:blur(20px);
-    box-shadow: 0 0 10px rgba(0 , 0 , 0 , .2);
+    border: 2px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;
 }
 
-.wrapper h1{
+.wrapper h1 {
     font-size: 36px;
     text-align: center;
 }
-.inputBox input{
+
+.inputBox input {
     width: 80%;
     height: 20px;
     background: transparent;
@@ -47,23 +55,24 @@
 }
 
 
-.input-box input::placeholder{
+.input-box input::placeholder {
     color: #fff;
 }
 
-.inputBox label{
+.inputBox label {
     color: #0053ba;
     font-size: 18px;
     padding-top: 20px;
 }
-.wrapper button{
+
+.wrapper button {
     width: 100%;
     height: 45px;
     border-radius: 40px;
     border: none;
     outline: none;
     background: #b0c3ff;
-    box-shadow: 0 0 10px rgba(0 , 0 , 0 , .1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     cursor: pointer;
     font-size: 16px;
     color: #333;
@@ -71,42 +80,27 @@
     margin-top: 30px;
 }
 
-.wrapper button:disabled{
+.wrapper button:disabled {
     opacity: 0.2;
 }
 
-.wrapper button:hover{
+.wrapper button:hover {
     background-color: #758bd2;
 }
-.link{
+
+.link {
     text-align: center;
     font-size: 14.5px;
-    margin:20px 0 15px;
+    margin: 20px 0 15px;
 }
 
-.link p a{
+.link p a {
     color: #fff;
     text-decoration: none;
     font-weight: 600;
 
 }
-.p a:hover{
+
+.p a:hover {
     text-decoration: underline;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

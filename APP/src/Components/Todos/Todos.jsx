@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect, useRef, useCallback } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { userContext } from "../../App";
 import AddTodo from "./AddTodo";
 import Select from 'react-select'
 import { Link, Navigate, Outlet, json, useNavigate } from 'react-router-dom';
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { MdOutlineEdit, MdWidthNormal } from "react-icons/md";
-import updateIcon from "../../Images/editIcon.svg";
 import Popup from 'reactjs-popup';
 import UpdateTodo from "./UpdateTodo";
 import style from "./Todos.module.css";

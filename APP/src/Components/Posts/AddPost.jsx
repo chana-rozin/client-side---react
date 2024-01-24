@@ -1,12 +1,13 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext} from "react";
 import { userContext } from "../../App";
+import { cacheContext } from "../../App";
+
 const AddPost = (props) => {
 
-    const { setPostsArr, closePopUp, setIsAdded } = props;
-    const { currentUser, setCurrentUser } = useContext(userContext);
+    const {setPostsArr, closePopUp} = props;
+    const { currentUser} = useContext(userContext);
+    const {updateCacheFrequencies } = useContext(cacheContext);
     const userId = currentUser.id;
-    const navigate = useNavigate();
 
     const post = {
         "userId": "0",
@@ -14,6 +15,7 @@ const AddPost = (props) => {
         "title": "",
         "body": ""
     }
+
     async function handleAddBtn(event) {
         event.preventDefault();
         post.userId = userId;
@@ -32,19 +34,17 @@ const AddPost = (props) => {
                 'Content-type': 'application/json; charset=UTF-8',
             },
         })
-            .then((response) => {
-                if (response.status === 201) {
-                    let updateData;
-                    increasePostId();
-                    setPostsArr(prevArr => {updateData = [...prevArr, post];
-                    return updateData});
-                    localStorage.setItem("posts", JSON.stringify({ user: currentUser.id, data: updateData }))
-                updateCacheFrequencies("photos");
-                }
-                else {
-                    setErrMessage("500 something get worng:( try latter.")
-                }
-            })
+        .then((response) => {
+            if (response.ok) {
+                let updateData;
+                increasePostId();
+                setPostsArr(prevArr => {updateData = [...prevArr, post];
+                return updateData});
+                localStorage.setItem("posts", JSON.stringify({ user: currentUser.id, data: updateData }))
+            updateCacheFrequencies("photos");
+            }
+        })
+        .catch ((error) => console.error(error))
     }
 
     function increasePostId() {
@@ -55,7 +55,7 @@ const AddPost = (props) => {
                 "Content-type": "application/json; charset=UTF-8",
             },
         })
-            .catch(err => console.error(err))
+        .catch(err => console.error(err))
     }
 
 
@@ -82,4 +82,4 @@ const AddPost = (props) => {
 }
 
 
-export default AddPost
+export default AddPost;

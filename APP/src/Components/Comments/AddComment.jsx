@@ -1,16 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import React, { useContext, useState } from "react";
+import React, { useContext} from "react";
 import { userContext } from "../../App";
 import { cacheContext } from "../../App";
 
 const AddComment = (props) => {
-    const { postId, setCommentsArr, closePopUp } = props;
-    const { currentUser } = useContext(userContext);
-    const {cacheGet,updateCacheFrequencies} = useContext(cacheContext);
+    const {postId, setCommentsArr, closePopUp} = props;
+    const {currentUser} = useContext(userContext);
+    const {updateCacheFrequencies } = useContext(cacheContext);
 
-    const navigate = useNavigate();
-
-    const defaultComment = {
+    const comment = {
         postId: postId,
         id: "",
         name: "",
@@ -18,45 +15,37 @@ const AddComment = (props) => {
         body: "",
     };
 
-    const [comment, setComment] = useState({ ...defaultComment });
-    const [errMessage, setErrMessage] = useState("");
-
     async function handleAddBtn(event) {
         event.preventDefault();
-        const newComment = {
-            ...comment,
-            name: event.target.name.value,
-            body: event.target.body.value,
-            id: await getCommentId(),
-        };
-        setComment(newComment);
-        addComment(newComment);
+        comment.name = event.target.name.value,
+        comment.email = event.target.email.value,
+        comment.body = event.target.body.value,
+        comment.id = await getCommentId(),
+        addComment();
         closePopUp();
     }
 
-    async function addComment(newComment) {
-        try {
-            const response = await fetch("http://localhost:3000/comments", {
-                method: 'POST',
-                body: JSON.stringify(newComment),
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-            });
-
-            if (response.ok) {
-                increaseCommentId();
-                let updateData;
-                setCommentsArr((prevArr) => {updateData=[...prevArr, newComment];
-                    return updateData;});
-                localStorage.setItem("comments", JSON.stringify({user:currentUser.id,data:updateData}))
-                updateCacheFrequencies("comments");
-            } else {
-                setErrMessage("500 something get wrong:( try later.");
-            }
-        } catch (error) {
-            console.error(error);
-        }
+    async function addComment() {
+        await fetch("http://localhost:3000/comments", {
+            method: 'POST',
+            body: JSON.stringify(comment),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((respons) => {
+                if (respons.ok) {
+                    increaseCommentId();
+                    let updateData;
+                    setCommentsArr((prevArr) => {
+                        updateData = [...prevArr, comment];
+                        return updateData;
+                    });
+                    localStorage.setItem("comments", JSON.stringify({ user: currentUser.id, data: updateData }))
+                    updateCacheFrequencies("comments");
+                }
+            })
+            .catch((error) => console.error(error));
     }
 
     function increaseCommentId() {
@@ -71,14 +60,11 @@ const AddComment = (props) => {
     }
 
     async function getCommentId() {
-        try {
-            const id = await fetch("http://localhost:3000/config/1")
-                .then((result) => result.json())
-                .then((json) => json.commentId.toString());
-            return id;
-        } catch (error) {
-            console.error(error);
-        }
+        const id = await fetch("http://localhost:3000/config/1")
+            .then((result) => result.json())
+            .then((json) => json.commentId.toString())
+            .catch(err => console.error(err));
+        return id;
     }
 
     return (
@@ -86,12 +72,7 @@ const AddComment = (props) => {
             <div className="container">
                 <p>Add your comment:</p>
                 <form onSubmit={handleAddBtn}>
-                    <input
-                        placeholder="Name"
-                        type="text"
-                        name="name"
-                        required
-                    ></input>
+                    <input placeholder="Name" type="text" name="name" required></input>
                     <textarea name="body" placeholder="Your text here" required></textarea>
                     <input type="submit" value="Add"></input>
                 </form>
