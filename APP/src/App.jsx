@@ -11,9 +11,7 @@ import Photos from './Components/Photos/Photos'
 import Layout from './Components/Layout/Layout'
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute'
 import { React, createContext, useEffect, useState } from 'react'
-import { ReactDOM } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams, renderMatches } from 'react-router-dom'
-import PostDetails from './Components/Posts/PostDetails'
 export const userContext = createContext()
 export const cacheContext = createContext()
 

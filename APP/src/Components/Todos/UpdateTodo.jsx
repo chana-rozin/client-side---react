@@ -7,17 +7,17 @@ const UpdateTodo = (props) => {
   const { todo, setInEditing, setTodosArr } = props;
   const { updateCacheFrequencies } = useContext(cacheContext);
   const { currentUser } = useContext(userContext);
-  const handleTodoUpdate = async (event) => {
-    event.preventDefault();
-    const updatedTodo = {
-      ...todo,
-      title: event.target.title.value,
-      completed: event.target.completed.checked,
-    };
 
+  async function handleTodoUpdate(event) {
+    event.preventDefault();
+    todo.title = event.target.title.value;
+    todo.completed = event.target.completed.checked;
     fetch(`http://localhost:3000/todos/${todo.id}`, {
-      method: "PUT",
-      body: JSON.stringify(updatedTodo),
+      method: 'PATCH',
+      body: JSON.stringify({
+        title: todo.title,
+        completed: todo.completed,
+      }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -27,7 +27,7 @@ const UpdateTodo = (props) => {
           setInEditing(-1);
           let updateData;
           setTodosArr(prev => {
-            updateData = prev.map((el) => (el.id === todo.id ? updatedTodo : el));
+            updateData = prev.map((el) => (el.id === todo.id ? todo : el));
             return updateData
           });
           localStorage.setItem("todos", JSON.stringify({ user: currentUser.id, data: updateData }));

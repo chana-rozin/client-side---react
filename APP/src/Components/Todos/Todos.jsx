@@ -1,28 +1,26 @@
-import React, { useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { userContext } from "../../App";
 import AddTodo from "./AddTodo";
 import Select from 'react-select'
-import { Link, Navigate, Outlet, json, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { RiDeleteBin7Fill } from "react-icons/ri";
-import { MdOutlineEdit, MdWidthNormal } from "react-icons/md";
+import { MdOutlineEdit } from "react-icons/md";
 import Popup from 'reactjs-popup';
 import UpdateTodo from "./UpdateTodo";
 import style from "./Todos.module.css";
 import "../commonStyle/popupStyle.css"
 import { FiPlusCircle } from "react-icons/fi";
 import { cacheContext } from "../../App";
-const Todos = () => {
 
-    const { currentUser, setCurrentUser} = useContext(userContext);
+const Todos = () => {
+    const { currentUser } = useContext(userContext);
     const userId = currentUser.id;
-    const {cacheGet, updateCacheFrequencies} = useContext(cacheContext);
+    const { cacheGet, updateCacheFrequencies } = useContext(cacheContext);
     const [toShowTodosArr, setToShowTodosArr] = useState([]);
     const [filtersArr, setFiltersArr] = useState([]);
     const [todosArr, setTodosArr] = useState(cacheGet("todos"));
     const [sortBy, setSortBy] = useState("");
     const [isAdded, setIsAdded] = useState(false);
-    const [id, setId] = useState(0);
-    const navigate = useNavigate();
     const [inEditing, setInEditing] = useState(-1);
 
     useEffect(() => {
@@ -30,13 +28,13 @@ const Todos = () => {
             fetch(`http://localhost:3000/todos?userId=${userId}`)
                 .then(response => response.json())
                 .then(data => {
-                    localStorage.setItem("todos",JSON.stringify({user:userId,data:data}));
+                    localStorage.setItem("todos", JSON.stringify({ user: userId, data: data }));
                     updateCacheFrequencies("todos");
                     setTodosArr(data);
                 })
                 .catch(error =>
                     console.error(error));
-        if(!todosArr.length)
+        if (!todosArr.length)
             fetchTodos();
     }, []);
 
@@ -46,18 +44,17 @@ const Todos = () => {
 
 
     function deleteTodo(id) {
-        
-
         fetch(`http://localhost:3000/todos/${id}`, {
             method: 'DELETE',
         })
-            .then(response => 
-                {if(response.ok)
-                   { const updataData=todosArr.filter(todo => todo.id != id);
-                    localStorage.setItem("todos", JSON.stringify({user:currentUser.id,data:updataData}))
+            .then(response => {
+                if (response.ok) {
+                    const updataData = todosArr.filter(todo => todo.id != id);
+                    localStorage.setItem("todos", JSON.stringify({ user: currentUser.id, data: updataData }))
                     updateCacheFrequencies("todos");
-                    setTodosArr(updataData);}
-                });
+                    setTodosArr(updataData);
+                }
+            });
     }
 
     function handleFilterBy(filterKey, inputValue) {

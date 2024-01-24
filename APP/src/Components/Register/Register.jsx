@@ -1,15 +1,13 @@
-import { useState,useContext,useEffect } from "react";
+import { useState, useContext, useEffect,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import style from "./Register.module.css"
 const Register = () => {
-  const [password, setPassword] = useState("");
-  const [verifyPassword, setVerifyPassword] = useState("");
   const [PW, setPW] = useState({ "password": "", "verifyPW": "" })
   const [isPwVerified, setIsPwVerified] = useState(false);
   const [errMessage, setErrMessage] = useState("");
   const [registerStep, setRgisterStep] = useState(1);
-  const { currentUser, setCurrentUser } = useContext(userContext);
+  const { setCurrentUser } = useContext(userContext);
   const navigate = useNavigate();
   const user = {
     "id": 0,
@@ -33,16 +31,6 @@ const Register = () => {
       "catchPhrase": "",
       "bs": ""
     }
-  }
-
-  function handlePwVerifyChange(event) {
-    event.preventDefault();
-    setIsPwVerified(password === event.target.value);
-  }
-
-  const handlePasswordChange = (event) => {
-    event.preventDefault();
-    setPassword(event.target.value)
   }
 
   function handleNextBtn(event) {
@@ -72,10 +60,15 @@ const Register = () => {
     user.address.zipcode = event.target.zipcode.value;
     user.address.geo.lat = event.target.lat.value;
     user.address.geo.lng = event.target.lng.value;
-    user.address.phone = event.target.phone.value;
+    user.phone = event.target.phone.value;
     user.company.name = event.target.companyName.value;
     user.company.catchPhrase = event.target.catchPhrase.value;
     user.company.bs = event.target.bs.value;
+    addUser();
+  }
+
+  
+  function addUser() {
     fetch("http://localhost:3000/users", {
       method: 'POST',
       body: JSON.stringify(user),
@@ -118,13 +111,13 @@ const Register = () => {
   return (
     <>
       <div className={style.wrapper}>
-          <h1>Please sign up</h1>
+        <h1>Please sign up</h1>
         <form onSubmit={(event) => handleNextBtn(event)} className={style.inputBox}>
-            <input disabled={registerStep != 1} name="username" type="text" placeholder="usernane" required />
-            <input disabled={registerStep != 1} placeholder="password" onChange={(e) => setPW(prev => ({ ...prev, password: e.target.value }))} name="password" type="password" />
-            <input disabled={registerStep != 1} placeholder="verify password" onChange={(e) => setPW(prev => ({ ...prev, verifyPW: e.target.value }))} name="verifyPassword" type="password" />
-            {registerStep === 1 &&
-              <button disabled={!isPwVerified} type="submit">Next</button>}
+          <input disabled={registerStep != 1} name="username" type="text" placeholder="usernane" required />
+          <input disabled={registerStep != 1} placeholder="password" onChange={(e) => setPW(prev => ({ ...prev, password: e.target.value }))} name="password" type="password" />
+          <input disabled={registerStep != 1} placeholder="verify password" onChange={(e) => setPW(prev => ({ ...prev, verifyPW: e.target.value }))} name="verifyPassword" type="password" />
+          {registerStep === 1 &&
+            <button disabled={!isPwVerified} type="submit">Next</button>}
         </form>
         {registerStep === 2 && <form onSubmit={handleSubmit} className={style.inputBox}>
           <input name="name" type="text" placeholder="name" />

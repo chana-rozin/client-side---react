@@ -6,7 +6,8 @@ import { cacheContext } from "../../App";
 const UpdatePost = (props) => {
   const { post, setInEditing, setPostsArr } = props;
   const { cacheGet, updateCacheFrequencies } = useContext(cacheContext);
-  const { currentUser, setCurrentUser } = useContext(userContext)
+  const { currentUser, setCurrentUser } = useContext(userContext);
+  
   async function handlePostUpdate(event) {
     event.preventDefault();
     post.title = event.target.title.value;
@@ -34,7 +35,6 @@ const UpdatePost = (props) => {
         }
       })
       .catch(err => console.error(err))
-
   }
 
   return (
