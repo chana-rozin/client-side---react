@@ -150,7 +150,7 @@ const Todos = () => {
                             <span> {todo.title} </span>
                             <span onClick={() => deleteTodo(todo.id)}><RiDeleteBin7Fill /></span>
                             <span onClick={() => setInEditing(index)}><MdOutlineEdit /></span></> :
-                            <UpdateTodo todo={todo} setInEditing={setInEditing} todosArr={todosArr} setTodosArr={setTodosArr} />}
+                            <UpdateTodo todo={todo} setInEditing={setInEditing} setTodosArr={setTodosArr} />}
                     </div>
                     ))}
                     <Outlet />

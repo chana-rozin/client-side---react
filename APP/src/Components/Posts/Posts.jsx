@@ -141,11 +141,7 @@ function viewPost(postId){
 
             </Popup>
             <div>
-                <InfiniteScroll
-               
-                    pageStart={0}
-                    loadMore={loadMore}
-                    useWindow={false}>
+                
                     <div className={style.listContainer}>{displayedData.map(post => (
                         <div key={post.id} className={style.post}>
                             {selectedPostId !== post.id ? <>
@@ -157,9 +153,6 @@ function viewPost(postId){
                         </div>
                     ))}
                     </div>
-
-                </InfiniteScroll>
-            
             </div>
         </>
     );
